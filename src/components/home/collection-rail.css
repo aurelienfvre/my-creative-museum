@@ -1,0 +1,117 @@
+.museum-carousel {
+  position: relative;
+  padding: 3rem 0 2rem;
+  background: var(--background);
+  overflow: clip;
+}
+.museum-carousel-heading h2 {
+  font-size: clamp(2.5rem, 6vw, 6rem);
+  letter-spacing: -0.055em;
+  line-height: 1;
+  white-space: nowrap;
+  font-weight: 400;
+}
+.museum-carousel-heading em {
+  font-family: var(--font-editorial), serif;
+  font-weight: 400;
+}
+.museum-carousel-stage,
+.museum-carousel-caption {
+  display: none;
+}
+.museum-carousel-fallback {
+  display: flex;
+  gap: 2rem;
+  padding: 3rem 3.5rem;
+  overflow-x: auto;
+}
+.museum-carousel-card {
+  flex: 0 0 23rem;
+  min-width: 0;
+}
+.museum-carousel-card .artwork-image {
+  height: 24rem;
+}
+.museum-carousel-card > span {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  font-size: 0.85rem;
+}
+.museum-carousel-card small {
+  color: var(--muted);
+}
+.has-webgl-carousel {
+  padding-top: 7.5rem;
+  height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
+.has-webgl-carousel .museum-carousel-heading {
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+.has-webgl-carousel .museum-carousel-stage {
+  display: block;
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  margin-top: 1rem;
+  overflow: hidden;
+  contain: layout paint;
+}
+.has-webgl-carousel canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.has-webgl-carousel .museum-carousel-caption {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 1rem;
+  min-height: 2rem;
+  font-size: 0.85rem;
+}
+.museum-carousel-caption > span {
+  color: var(--muted);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.65rem;
+}
+.has-webgl-carousel .museum-carousel-fallback {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  padding: 0;
+}
+.has-webgl-carousel .museum-carousel-fallback:focus-within {
+  clip-path: none;
+  width: min(25rem, 90%);
+  height: auto;
+  bottom: 1rem;
+  left: 1rem;
+  z-index: 3;
+  background: var(--background);
+  padding: 1rem;
+}
+.has-webgl-carousel .museum-carousel-card {
+  flex-basis: 20rem;
+}
+.has-webgl-carousel .museum-carousel-card .artwork-image {
+  display: none;
+}
+@media (max-width: 1023px) {
+  .museum-carousel-fallback {
+    padding-inline: 1.25rem;
+    gap: 1.25rem;
+  }
+  .museum-carousel-card {
+    flex-basis: 75vw;
+  }
+  .museum-carousel-card .artwork-image {
+    height: 22rem;
+  }
+}
