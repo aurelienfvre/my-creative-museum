@@ -13,7 +13,7 @@ export default function SearchDialog({
 }) {
   return (
     <dialog
-      className="search-dialog"
+      className="search-dialog fixed mx-auto mt-8 mb-auto max-h-[80svh] w-[calc(100%_-_2rem)] overflow-auto border-0 bg-background p-6 text-ink backdrop:bg-[rgb(20_25_30/0.48)] backdrop:backdrop-blur-[5px] lg:mt-24 lg:w-[min(44rem,90vw)] lg:p-10"
       ref={dialog}
       aria-labelledby="search-title"
       onClick={(event) => {
@@ -23,10 +23,13 @@ export default function SearchDialog({
         if (event.key === "Escape") dialog.current.close();
       }}
     >
-      <div className="search-dialog-head">
-        <h2 id="search-title">Une œuvre en tête ?</h2>
+      <div className="search-dialog-head flex items-center justify-between gap-4">
+        <h2 id="search-title" className="text-[1.8rem] lg:text-[2.3rem]">
+          Une œuvre en tête ?
+        </h2>
         <button
           type="button"
+          className="text-[2rem]"
           onClick={() => dialog.current.close()}
           aria-label="Fermer la recherche"
         >
@@ -47,7 +50,7 @@ export default function SearchDialog({
       <TransitionLink
         href={`/collection${query ? `?q=${encodeURIComponent(query)}` : ""}`}
         onClick={() => dialog.current.close()}
-        className="text-link"
+        className="text-link inline-flex items-center justify-between gap-5 whitespace-nowrap pb-2 text-[0.82rem] text-foreground lg:gap-8"
       >
         <FlipText>
           {query ? "Voir tous les résultats" : "Explorer toute la collection"}

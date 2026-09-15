@@ -33,27 +33,35 @@ export default function Collection({ objects }) {
         artists={artists}
         change={change}
       />
-      <div className="collection-count">
+      <div className="collection-count flex items-center justify-between pt-[1.4rem] pb-[2.4rem] text-[.7rem] text-muted lg:text-[.75rem]">
         <p aria-live="polite">
           {filtered.length} œuvre{filtered.length > 1 ? "s" : ""} sur{" "}
           {objects.length}
         </p>
         {(query || movement || artist || sort !== "selection") && (
-          <button type="button" onClick={reset}>
+          <button
+            className="border-b text-foreground"
+            type="button"
+            onClick={reset}
+          >
             <FlipText>Réinitialiser les filtres</FlipText> <Icon name="close" />
           </button>
         )}
       </div>
       {filtered.length ? (
-        <div className="collection-grid">
+        <div className="collection-grid grid grid-cols-1 gap-10 pb-20 lg:grid-cols-3 lg:gap-x-10 lg:gap-y-12 [&_.card-image-wrap_.artwork-image]:aspect-square">
           {filtered.map((object, index) => (
             <ArtworkCard key={object.id} object={object} index={index} />
           ))}
         </div>
       ) : (
-        <div className="empty-state">
-          <h2>Aucune rencontre, pour l’instant.</h2>
-          <p>Essayez un autre artiste ou retirez un filtre.</p>
+        <div className="empty-state pt-16 pb-24 text-center">
+          <h2 className="mb-4 text-[2rem]">
+            Aucune rencontre, pour l’instant.
+          </h2>
+          <p className="mb-8 text-muted">
+            Essayez un autre artiste ou retirez un filtre.
+          </p>
           <button className="text-link" type="button" onClick={reset}>
             <FlipText>Retrouver toute la collection</FlipText>{" "}
             <Icon name="arrowUpRight" />

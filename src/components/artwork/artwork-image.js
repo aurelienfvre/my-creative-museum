@@ -55,7 +55,10 @@ export default function ArtworkImage({
     { scope: container, dependencies: [src, failed], revertOnUpdate: true },
   );
   return (
-    <div ref={container} className={`artwork-image ${className}`}>
+    <div
+      ref={container}
+      className={`artwork-image relative overflow-hidden bg-[#e3e3d8] ${className}`}
+    >
       {src && !failed ? (
         <Media
           ref={media}
@@ -66,12 +69,12 @@ export default function ArtworkImage({
           preload={preload}
           loading={eager && !preload ? "eager" : undefined}
           data-primary-media={preload ? "true" : undefined}
-          className="media-content"
+          className="media-content transition-transform duration-800 ease-[cubic-bezier(.2,.7,.2,1)]"
           objectFit={contain ? "contain" : "cover"}
           onError={() => setFailed(true)}
         />
       ) : (
-        <div className="image-unavailable">
+        <div className="image-unavailable flex h-full min-h-48 flex-col items-center justify-center gap-4 p-8 text-center text-[.85rem] text-muted">
           <span>Reproduction momentanément indisponible</span>
           <span>{title}</span>
         </div>

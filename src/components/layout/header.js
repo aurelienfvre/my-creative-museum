@@ -31,23 +31,26 @@ export default function Header({ objects }) {
     ? objects.filter((object) => matchesSearch(object, query))
     : [];
   return (
-    <header className="site-header" ref={scope}>
+    <header
+      className="site-header fixed inset-x-0 top-0 z-50 mx-0 flex h-20 items-center justify-between border-b border-line bg-background px-5 transition-transform duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] data-[header-hidden=true]:-translate-y-[110%] motion-reduce:transition-none lg:h-25 lg:px-14"
+      ref={scope}
+    >
       <TransitionLink
         href="/"
-        className="brand"
+        className="brand flex items-center gap-[0.7rem] [&>svg]:size-[2.7rem] lg:[&>svg]:size-[3.3rem] text-foreground"
         aria-label="My Creative Museum — accueil"
       >
         <MuseumLogo />
-        <span className="brand-name">
+        <span className="brand-name text-[0.72rem] font-semibold leading-[1.08] tracking-[-0.04em] lg:text-[0.9rem]">
           my creative
           <br />
           museum
         </span>
       </TransitionLink>
-      <div className="header-actions">
+      <div className="header-actions flex items-center gap-4 lg:gap-8">
         <button
           type="button"
-          className="search-button"
+          className="search-button grid size-8 place-items-center [&>svg]:w-[1.2rem]"
           onClick={openSearch}
           aria-label="Rechercher une œuvre"
         >

@@ -1,4 +1,5 @@
 import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
+import { metadataBase, pageMetadata } from "@/lib/metadata";
 import "lenis/dist/lenis.css";
 import CustomCursor from "@/components/animation/custom-cursor";
 import GSAPWrapper from "@/components/animation/gsap-wrapper";
@@ -23,10 +24,12 @@ const editorial = Instrument_Serif({
   weight: "400",
   style: ["normal", "italic"],
   subsets: ["latin"],
-  variable: "--font-editorial",
+  variable: "--font-museum-editorial",
   display: "swap",
 });
 export const metadata = {
+  ...pageMetadata({ title: "Le goût de regarder autrement" }),
+  metadataBase,
   title: {
     default: "My Creative Museum — Le goût de regarder autrement",
     template: "%s — My Creative Museum",

@@ -9,6 +9,7 @@ export default function SearchForm({ query, setQuery, input, onClose }) {
   const router = useRouter();
   return (
     <form
+      className="mt-8 flex border-b border-foreground pb-2"
       action="/collection"
       onSubmit={(event) => {
         event.preventDefault();
@@ -23,6 +24,7 @@ export default function SearchForm({ query, setQuery, input, onClose }) {
         Titre, artiste ou mouvement
       </label>
       <input
+        className="w-full border-0 bg-transparent text-[max(16px,0.8rem)] outline-0 lg:text-[1rem]"
         ref={input}
         id="global-search"
         name="q"
@@ -31,7 +33,11 @@ export default function SearchForm({ query, setQuery, input, onClose }) {
         onChange={(event) => setQuery(event.target.value)}
         autoComplete="off"
       />
-      <button type="submit" aria-label="Afficher tous les résultats">
+      <button
+        className="px-[0.8rem] py-[0.3rem]"
+        type="submit"
+        aria-label="Afficher tous les résultats"
+      >
         <Icon name="arrowUpRight" />
       </button>
     </form>

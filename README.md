@@ -86,3 +86,10 @@ Les styles propres à un composant restent dans son dossier. Les imports utilise
 ### Taille des composants
 
 Convention du projet : chaque module JavaScript dans `src/components/` reste à 100 lignes maximum après formatage. Extraire les blocs d’interface en sous-composants et la logique en hooks ou modules spécialisés ; ne pas compresser le code pour contourner cette limite. Les animations conservent un propriétaire unique et leurs fonctions de nettoyage. `npm test` contrôle automatiquement cette règle.
+
+
+## Partage et métadonnées
+
+Open Graph et Twitter utilisent `public/social/opengraph.png` (1200 × 630), avec titre, description et URL canonique propres à chaque page. Le SVG source est conservé à côté ; `node scripts/generate-social-images.mjs` régénère le PNG et l’icône Apple.
+
+Configurer `NEXT_PUBLIC_SITE_URL` avec l’URL publique définitive (par exemple dans `.env.local` et chez l’hébergeur). Sur Vercel, `VERCEL_PROJECT_PRODUCTION_URL` sert de valeur de repli ; en développement, les liens utilisent `http://localhost:3000`.
