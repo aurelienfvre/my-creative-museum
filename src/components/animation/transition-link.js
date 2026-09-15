@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useContext } from "react";
-import { NavigationContext } from "@/components/animation/page-transition";
+import { NavigationContext } from "@/contexts/navigation-context";
 
 export default function TransitionLink({ href, children, onClick, ...props }) {
   const navigate = useContext(NavigationContext);

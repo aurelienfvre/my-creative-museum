@@ -77,7 +77,12 @@ Build de production réussi avec les 29 fiches préconstruites ; réponses serve
 - `src/components/collection/` : recherche, filtres et grille de la collection.
 - `src/components/billetterie/` : calculateur et présentation du billet.
 - `src/lib/` : accès API, calculs, recherche et configuration GSAP.
+- `src/contexts/` : action de navigation animée partagée par les liens, le menu et la recherche.
 - `src/stores/` : état partagé Zustand.
 - `work/qa/` : tests de données et de régression, exécutés par `npm test`.
 
 Les styles propres à un composant restent dans son dossier. Les imports utilisent `@/` et pointent directement vers le fichier concerné.
+
+### Taille des composants
+
+Convention du projet : chaque module JavaScript dans `src/components/` reste à 100 lignes maximum après formatage. Extraire les blocs d’interface en sous-composants et la logique en hooks ou modules spécialisés ; ne pas compresser le code pour contourner cette limite. Les animations conservent un propriétaire unique et leurs fonctions de nettoyage. `npm test` contrôle automatiquement cette règle.
