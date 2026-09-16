@@ -45,6 +45,7 @@ export default function useCollection(objects) {
     () => {
       if (
         useMuseumStore.getState().isFirstRender ||
+        document.documentElement.dataset.restoredPage === "/collection" ||
         window.matchMedia("(prefers-reduced-motion: reduce)").matches
       )
         return;

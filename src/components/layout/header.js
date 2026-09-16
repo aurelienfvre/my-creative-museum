@@ -4,11 +4,10 @@ import TransitionLink from "@/components/animation/transition-link";
 import Menu from "@/components/layout/menu";
 import Icon from "@/components/ui/icon";
 import MuseumLogo from "@/components/ui/museum-logo";
-import { gsap, useGSAP } from "@/lib/gsap";
 import { matchesSearch } from "@/lib/search";
-
 import SearchDialog from "./header/search-dialog";
 import useHeaderScroll from "./header/use-header-scroll";
+import useSearchDialog from "./header/use-search-dialog";
 
 export default function Header({ objects }) {
   const [query, setQuery] = useState("");
@@ -16,20 +15,11 @@ export default function Header({ objects }) {
   const input = useRef(null);
   const scope = useRef(null);
   useHeaderScroll(scope);
-  const { contextSafe } = useGSAP({ scope });
-  const openSearch = contextSafe(() => {
-    dialog.current.showModal();
-    input.current.focus();
-    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches)
-      gsap.fromTo(
-        dialog.current,
-        { opacity: 0, y: -16 },
-        { opacity: 1, y: 0, duration: 0.4, ease: "museum" },
-      );
-  });
-  const results = query.trim()
-    ? objects.filter((object) => matchesSearch(object, query))
-    : [];
+  const { openSearch, closeSearch } = useSearchDialog(dialog, input, scope);
+  const results =
+    Array.from(query.trim()).length >= 3
+      ? objects.filter((object) => matchesSearch(object, query))
+      : [];
   return (
     <header
       className="site-header fixed inset-x-0 top-0 z-50 mx-0 flex h-20 items-center justify-between border-b border-line bg-background px-5 transition-transform duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] data-[header-hidden=true]:-translate-y-[110%] motion-reduce:transition-none lg:h-25 lg:px-14"
@@ -60,6 +50,7 @@ export default function Header({ objects }) {
       </div>
       <SearchDialog
         dialog={dialog}
+        onClose={closeSearch}
         input={input}
         query={query}
         setQuery={setQuery}

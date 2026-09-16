@@ -1,7 +1,7 @@
 import { gsap } from "@/lib/gsap";
 export function enterPage(refs, content, header, pageLayers, finishNavigation) {
   refs.navigationPhase.current = "entering";
-  window.scrollTo({ top: 0, behavior: "instant" });
+  window.scrollTo({ top: refs.returnScroll.current, behavior: "instant" });
   gsap.set(content, {
     autoAlpha: 1,
     transformOrigin: `50% ${window.scrollY + window.innerHeight / 2}px`,
@@ -17,8 +17,8 @@ export function enterPage(refs, content, header, pageLayers, finishNavigation) {
       .timeline({ onComplete: finishNavigation })
       .to(refs.artworkSnapshot.current, {
         y: window.innerHeight,
-        duration: 0.8,
-        ease: "museum",
+        duration: 0.65,
+        ease: (progress) => 1 - gsap.parseEase("museum")(1 - progress),
       });
     return;
   }

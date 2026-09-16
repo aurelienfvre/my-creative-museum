@@ -1,10 +1,13 @@
 import { gsap } from "@/lib/gsap";
 import { useMuseumStore } from "@/stores/use-museum-store";
+import { startArtworkViewTransition } from "./artwork-view-transition";
 import { createSnapshot } from "./create-snapshot";
 import { leavePage } from "./leave-page";
-export function navigateTo(refs, href, router) {
+import { prepareNavigation } from "./return-navigation";
+export function navigateTo(refs, href, router, options = {}) {
   const store = useMuseumStore.getState();
   if (store.isTransitionActive || store.isFirstRender) return;
+  ({ href, router } = prepareNavigation(refs, href, router, options));
   if (
     new URL(href, window.location.href).pathname === window.location.pathname
   ) {
@@ -16,11 +19,10 @@ export function navigateTo(refs, href, router) {
     return;
   }
   const targetPath = new URL(href, window.location.href).pathname;
-  refs.transitionKind.current = targetPath.startsWith("/oeuvres/")
-    ? "artwork"
-    : window.location.pathname.startsWith("/oeuvres/") &&
-        targetPath === "/collection"
-      ? "artwork-return"
+  refs.transitionKind.current = options.back
+    ? "artwork-return"
+    : targetPath.startsWith("/oeuvres/")
+      ? "artwork"
       : "page";
   refs.navigationPhase.current = "leaving";
   refs.navigationTimeline.current?.kill();
@@ -43,6 +45,13 @@ export function navigateTo(refs, href, router) {
   document.documentElement.style.overflow = "hidden";
   refs.contentRef.current.inert = true;
   refs.scope.current.classList.add("is-navigating");
+  if (
+    refs.transitionKind.current !== "page" &&
+    typeof document.startViewTransition === "function"
+  ) {
+    startArtworkViewTransition(refs, href, router);
+    return;
+  }
   gsap.set(refs.cover.current, {
     autoAlpha: 1,
     yPercent: 0,

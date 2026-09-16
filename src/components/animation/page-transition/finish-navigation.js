@@ -2,6 +2,7 @@ import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { useMuseumStore } from "@/stores/use-museum-store";
 export function finishNavigation(refs) {
   refs.navigationPhase.current = "idle";
+  delete document.documentElement.dataset.artworkReturn;
   refs.artworkSnapshot.current.replaceChildren();
   refs.artworkSnapshot.current.hidden = true;
   gsap.set(refs.artworkSnapshot.current, { clearProps: "transform,zIndex" });

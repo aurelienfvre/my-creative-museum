@@ -3,6 +3,7 @@ import { usePathname } from "next/navigation";
 import { useRef } from "react";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 import { useMuseumStore } from "@/stores/use-museum-store";
+import { prepareMotionScope } from "./prepare-motion-scope";
 
 export default function GSAPWrapper({ children }) {
   const scope = useRef(null);
@@ -12,7 +13,7 @@ export default function GSAPWrapper({ children }) {
     () => {
       if (isFirstRender) return;
       const root = scope.current;
-      root.dataset.motionReady = "true";
+      prepareMotionScope(root, pathname);
       const media = gsap.matchMedia();
       media.add(
         "(prefers-reduced-motion: no-preference)",
@@ -22,10 +23,13 @@ export default function GSAPWrapper({ children }) {
             const arrives = [...root.querySelectorAll("[data-arrive]")].filter(
               (element) => !initialized.has(element),
             );
-            arrives.forEach((element) => {
-              initialized.add(element);
-            });
-            if (arrives.length)
+            for (const element of arrives) initialized.add(element);
+            if (
+              document.documentElement.dataset.artworkTransition ||
+              document.documentElement.dataset.restoredPage
+            ) {
+              gsap.set(arrives, { autoAlpha: 1, clearProps: "transform" });
+            } else if (arrives.length)
               gsap.fromTo(
                 arrives,
                 { yPercent: 20, autoAlpha: 0 },
@@ -42,6 +46,10 @@ export default function GSAPWrapper({ children }) {
             root.querySelectorAll("[data-reveal]").forEach((element) => {
               if (initialized.has(element)) return;
               initialized.add(element);
+              if (document.documentElement.dataset.restoredPage) {
+                gsap.set(element, { autoAlpha: 1, clearProps: "transform" });
+                return;
+              }
               addedReveal = true;
               gsap.fromTo(
                 element,
@@ -60,8 +68,7 @@ export default function GSAPWrapper({ children }) {
                 },
               );
             });
-            // Pin refresh mutates spacer nodes. Only refresh for new animated content,
-            // otherwise MutationObserver and ScrollTrigger feed each other forever.
+            // Refresh only for new content to avoid pin spacer observer loops.
             if (arrives.length || addedReveal) ScrollTrigger.refresh();
           });
           setup();
@@ -85,7 +92,7 @@ export default function GSAPWrapper({ children }) {
     { scope, dependencies: [pathname, isFirstRender], revertOnUpdate: true },
   );
   return (
-    <div className="motion-scope" ref={scope} key={pathname}>
+    <div className="motion-scope" ref={scope}>
       {children}
     </div>
   );

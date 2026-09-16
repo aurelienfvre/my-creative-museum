@@ -1,32 +1,31 @@
 import TransitionLink from "@/components/animation/transition-link";
-import Icon from "@/components/ui/icon";
+import SearchHighlight from "./search-highlight";
+import SearchThumbnail from "./search-thumbnail";
 
-export default function SearchResults({ query, results, onClose }) {
+export default function SearchResults({ query, results, onNavigate }) {
   return (
     <div
       className="search-results my-[1.8rem] text-[0.85rem]"
       aria-live="polite"
     >
-      {query.trim() ? (
+      {Array.from(query.trim()).length >= 3 && (
         <>
           <p className="eyebrow font-mono text-[0.65rem] uppercase tracking-[0.08em] lg:text-[0.7rem]">
             {results.length} résultat{results.length > 1 ? "s" : ""}
           </p>
           {results.slice(0, 6).map((object) => (
             <TransitionLink
-              className="flex justify-between border-b border-line py-[0.9rem]"
+              className="flex items-center gap-4 border-b border-line py-3 transition-colors hover:bg-foreground/5 focus-visible:bg-foreground/5"
               href={`/oeuvres/${object.slug}`}
               key={object.id}
-              onClick={() => onClose()}
+              onClick={onNavigate}
             >
-              <span>
-                {object.title}
+              <SearchThumbnail src={object.image} />
+              <span className="min-w-0">
+                <SearchHighlight text={object.title} query={query} />
                 <small className="mt-[0.2rem] block text-[0.7rem] text-muted">
-                  {object.artist}
+                  <SearchHighlight text={object.artist} query={query} />
                 </small>
-              </span>
-              <span>
-                <Icon name="arrowUpRight" />
               </span>
             </TransitionLink>
           ))}
@@ -37,8 +36,6 @@ export default function SearchResults({ query, results, onClose }) {
             </p>
           )}
         </>
-      ) : (
-        <p>Essayez « Monet », « bleu » ou « Renaissance ».</p>
       )}
     </div>
   );

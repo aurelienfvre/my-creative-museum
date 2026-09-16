@@ -9,18 +9,27 @@ export function waitForPage(refs, contextSafe, finishNavigation) {
     refs.transitionKind.current === "page"
       ? [content, header].filter(Boolean)
       : [content];
-  gsap.set(pageLayers, {
-    autoAlpha: 0,
-    xPercent: refs.transitionKind.current !== "page" ? 0 : 110,
-    scale: refs.transitionKind.current !== "page" ? 1 : 0.92,
-    borderRadius: refs.transitionKind.current !== "page" ? 0 : 12,
-  });
+  const native = refs.nativeTransition.current;
+  if (!native)
+    gsap.set(pageLayers, {
+      autoAlpha: 0,
+      xPercent: refs.transitionKind.current !== "page" ? 0 : 110,
+      scale: refs.transitionKind.current !== "page" ? 1 : 0.92,
+      borderRadius: refs.transitionKind.current !== "page" ? 0 : 12,
+    });
   const enter = contextSafe(() => {
     if (disposed || ready) return;
     ready = true;
     observer.disconnect();
     clearTimeout(fallback);
-    enterPage(refs, content, header, pageLayers, finishNavigation);
+    if (native) {
+      if (refs.nativeTransition.current !== native) return;
+      window.scrollTo({ top: refs.returnScroll.current, behavior: "instant" });
+      refs.navigationPhase.current = "entering";
+      native.complete();
+    } else {
+      enterPage(refs, content, header, pageLayers, finishNavigation);
+    }
   });
   let checking = false;
   const check = () => {

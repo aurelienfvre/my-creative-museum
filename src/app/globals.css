@@ -963,3 +963,80 @@ h2 {
   display: block;
   vertical-align: initial;
 }
+
+/* The browser captures the page, including WebGL, for artwork navigation. */
+html[data-artwork-transition] .site-header {
+  view-transition-name: museum-header;
+}
+
+html[data-artwork-transition]::view-transition-group(root),
+html[data-artwork-transition]::view-transition-group(museum-header) {
+  animation: none;
+}
+
+html[data-artwork-transition]::view-transition-old(root),
+html[data-artwork-transition]::view-transition-new(root) {
+  mix-blend-mode: normal;
+  height: 100%;
+}
+
+html[data-artwork-transition]::view-transition-old(root) {
+  animation: none;
+  z-index: 0;
+}
+
+html[data-artwork-transition]::view-transition-new(root) {
+  animation: artwork-view-enter 850ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  z-index: 1;
+}
+
+html[data-artwork-transition]::view-transition-old(museum-header) {
+  animation: none;
+  opacity: 0;
+}
+
+html[data-artwork-transition]::view-transition-new(museum-header) {
+  animation: none;
+}
+
+@keyframes artwork-view-enter {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-artwork-transition]::view-transition-new(root) {
+    animation: none;
+  }
+}
+
+/* Returning lowers the old artwork to reveal the cached source page. */
+html[data-artwork-transition="return"]::view-transition-old(root) {
+  animation: artwork-view-enter 650ms cubic-bezier(0.22, 1, 0.36, 1) reverse
+    both;
+  z-index: 1;
+}
+html[data-artwork-transition="return"]::view-transition-new(root) {
+  animation: none;
+  z-index: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-artwork-transition="return"]::view-transition-old(root) {
+    animation: none;
+  }
+}
+
+/* Cached page effects can resume after the transition callback has finished. */
+.motion-scope[data-restored] [data-arrive],
+.motion-scope[data-restored] [data-reveal] {
+  /* biome-ignore lint/complexity/noImportantStyles: Override restored GSAP inline states. */
+  opacity: 1 !important;
+  /* biome-ignore lint/complexity/noImportantStyles: Override restored GSAP inline states. */
+  visibility: visible !important;
+  /* biome-ignore lint/complexity/noImportantStyles: A restored view must not replay its entrance. */
+  transform: none !important;
+}

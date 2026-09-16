@@ -1,7 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useContext } from "react";
-import Icon from "@/components/ui/icon";
 import { NavigationContext } from "@/contexts/navigation-context";
 
 export default function SearchForm({ query, setQuery, input, onClose }) {
@@ -13,11 +12,13 @@ export default function SearchForm({ query, setQuery, input, onClose }) {
       action="/collection"
       onSubmit={(event) => {
         event.preventDefault();
-        onClose();
+        if (Array.from(query.trim()).length < 3) return;
         const href = `/collection?q=${encodeURIComponent(query)}`;
-        if (window.location.pathname === "/collection" || !navigate)
-          router.push(href);
-        else navigate(href);
+        onClose(() => {
+          if (window.location.pathname === "/collection" || !navigate)
+            router.push(href);
+          else navigate(href);
+        });
       }}
     >
       <label className="sr-only" htmlFor="global-search">
@@ -28,18 +29,14 @@ export default function SearchForm({ query, setQuery, input, onClose }) {
         ref={input}
         id="global-search"
         name="q"
-        placeholder="Un titre, un artiste, une émotion…"
+        placeholder="Un titre, un artiste…"
         value={query}
         onChange={(event) => setQuery(event.target.value)}
         autoComplete="off"
+        aria-describedby={
+          Array.from(query.trim()).length < 3 ? "search-help" : undefined
+        }
       />
-      <button
-        className="px-[0.8rem] py-[0.3rem]"
-        type="submit"
-        aria-label="Afficher tous les résultats"
-      >
-        <Icon name="arrowUpRight" />
-      </button>
     </form>
   );
 }

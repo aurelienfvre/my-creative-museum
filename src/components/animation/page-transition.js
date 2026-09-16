@@ -9,6 +9,9 @@ export default function PageTransition({ children, navigation }) {
   const cover = useRef(null);
   const artworkSnapshot = useRef(null);
   const transitionKind = useRef("page");
+  const nativeTransition = useRef(null);
+  const artworkVisits = useRef([]);
+  const returnScroll = useRef(0);
   const transitionLogo = useRef(null);
   const preloader = useRef(null);
   const navigationTimeline = useRef(null);
@@ -22,6 +25,9 @@ export default function PageTransition({ children, navigation }) {
     cover,
     artworkSnapshot,
     transitionKind,
+    nativeTransition,
+    artworkVisits,
+    returnScroll,
     transitionLogo,
     preloader,
     navigationTimeline,

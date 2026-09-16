@@ -17,9 +17,23 @@ export function usePageNavigation(refs) {
     () => contextSafe(() => finishNavigation(refs)),
     [contextSafe, refs],
   );
-  const navigate = contextSafe((href) => navigateTo(refs, href, router));
+  const navigate = contextSafe((href, options) =>
+    navigateTo(refs, href, router, options),
+  );
   useEffect(() => {
-    if (!shouldEnter(refs, pathname)) return;
+    if (!shouldEnter(refs, pathname)) {
+      if (
+        refs.navigationPhase.current === "idle" &&
+        document.documentElement.dataset.artworkReturn
+      ) {
+        window.scrollTo({
+          top: refs.returnScroll.current,
+          behavior: "instant",
+        });
+        delete document.documentElement.dataset.artworkReturn;
+      }
+      return;
+    }
     return contextSafe(() => {
       if (!useMuseumStore.getState().isTransitionActive) return;
       return waitForPage(refs, contextSafe, finish);
@@ -28,6 +42,10 @@ export function usePageNavigation(refs) {
   useGSAP(
     () => () => {
       refs.navigationTimeline.current?.kill();
+      refs.nativeTransition.current?.cancel();
+      refs.nativeTransition.current = null;
+      delete document.documentElement.dataset.artworkTransition;
+      delete document.documentElement.dataset.artworkReturn;
       if (refs.navigationPhase.current !== "idle") {
         document.documentElement.style.overflow = refs.previousOverflow.current;
         useMuseumStore.getState().setIsTransitionActive(false);
