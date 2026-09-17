@@ -30,8 +30,9 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
+# secrets locaux ; seul le modèle sans identifiants est versionné
 .env*
+!.env.example
 
 # vercel
 .vercel
@@ -45,6 +46,16 @@ work/
 
 # md files
 CHECKLIST.md
+
+# Bases locales et journaux SQLite
 /data/
-!.env.example
-.env.example
+*.sqlite
+*.sqlite-*
+*.db
+*.db-*
+
+# Exports locaux de base (jamais les migrations SQL dans drizzle/)
+/backups/
+*.dump
+
+# src/db/, drizzle/ et drizzle.config.ts doivent rester versionnés.

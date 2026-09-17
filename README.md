@@ -100,6 +100,29 @@ Better Auth gère les comptes email/mot de passe, les mots de passe hachés et l
 
 Configuration : copier `.env.example` en `.env.local`, générer un secret (`openssl rand -hex 32`) pour `BETTER_AUTH_SECRET`, puis définir `BETTER_AUTH_URL` sur l’origine du site. Ne jamais committer le secret. Exécuter `npm run auth:migrate` avant le premier démarrage et après une évolution du schéma Better Auth.
 
-La base SQLite locale est dans `data/auth.sqlite` (ignorée par Git). En hébergement Node, conserver ce dossier sur un volume persistant ; sur Vercel/serverless, remplacer SQLite local par une base distante persistante avant déploiement. Le parcours simple actuel ne comprend pas d’envoi d’email de vérification ni de réinitialisation de mot de passe.
+La base SQLite locale est dans `data/auth.sqlite` (ignorée par Git). En hébergement Node, conserver ce dossier sur un volume persistant. Si `DATABASE_URL` est renseignée, Better Auth utilise Drizzle ORM avec le driver HTTP Neon/PostgreSQL à la place ; sur Vercel cette variable est obligatoire. Le parcours simple actuel ne comprend pas d’envoi d’email de vérification ni de réinitialisation de mot de passe.
 
 Documentation : https://better-auth.com/docs/integrations/next
+
+### Authentification sur Vercel
+
+1. Connecter Neon au projet depuis le Marketplace Vercel : https://vercel.com/marketplace/neon/neon. Vérifier que `DATABASE_URL` contient la chaîne PostgreSQL Neon avec pooling (`-pooler` dans le serveur), en conservant les paramètres TLS fournis par Neon.
+2. Garder `BETTER_AUTH_SECRET` (secret aléatoire privé) et définir `BETTER_AUTH_URL` sur l’origine HTTPS réelle du site. Retirer `AUTH_DATABASE_PATH` des variables Vercel : ce chemin ne sert qu’à SQLite local.
+3. Définir la **Build Command** sur `npm run build:vercel`. Elle applique les migrations SQL versionnées dans `drizzle/` avant le build. Le compte de base doit avoir les droits de création de tables.
+4. Pousser les modifications et redéployer. Utiliser une base distincte pour les previews et leur propre URL d’authentification ; ne pas leur partager la base de production.
+
+Les comptes SQLite locaux ne sont pas transférés automatiquement vers PostgreSQL. Les migrations ne sont jamais lancées lors d’une requête utilisateur. Ne pas lancer plusieurs migrations simultanées sur une même base.
+
+### Drizzle + Neon (consigne Auth)
+
+- `src/db/auth-schema.ts` : généré par la CLI Better Auth, ne pas modifier à la main.
+- `src/db/schema.ts` : ré-export du schéma, point d’entrée des futures tables métier.
+- `src/db/index.ts` : connexion Drizzle avec `@neondatabase/serverless`.
+- `src/lib/auth-settings.ts` : options partagées par le serveur et le générateur (email/mot de passe, limite de requêtes, cookies Next.js).
+- `drizzle.config.ts` : charge `.env.local` et conserve la priorité aux variables de Vercel. Les migrations utilisent `DATABASE_URL_UNPOOLED` si disponible, sinon `DATABASE_URL`.
+
+Après une modification de la configuration qui change les tables : `npm run auth:generate`, puis `npm run db:generate`. Relire et committer le SQL généré avec le schéma, puis `npm run db:migrate` pour l’appliquer. `npm run db:push` est réservé à une base de développement ; `npm run db:studio` ouvre l’explorateur.
+
+La génération du schéma est hors ligne et ne modifie pas Neon. La migration initiale suppose une base vide : si une ancienne version de l’application a déjà créé ses tables, ne pas les supprimer, préparer une migration de reprise avant déploiement. Les tables Drizzle utilisent des noms de colonnes en snake_case.
+
+Le mode SQLite local existant reste disponible sans `DATABASE_URL`, pour préserver les comptes locaux. Pour utiliser la même pile en développement et en production, renseigner l’URL d’une branche Neon de développement dans `.env.local`. Aucun service Neon Auth managé n’est nécessaire.
