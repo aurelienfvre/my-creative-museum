@@ -6,7 +6,7 @@ import "./ticket-summary.css";
 export default function TicketSummary({ summary, onReset }) {
   return (
     <aside
-      className="ticket-summary top-[7.5rem] border border-[rgb(36_59_186_/_0.22)] bg-[#faf9f4] px-8 pt-8 pb-6 text-foreground shadow-[0_12px_30px_-24px_rgb(36_59_186_/_0.22)] lg:sticky lg:max-h-[calc(100svh-9rem)] lg:overflow-y-auto"
+      className="ticket-summary min-w-0 overflow-x-hidden top-[7.5rem] border border-[rgb(36_59_186_/_0.22)] bg-[#faf9f4] px-8 pt-8 pb-6 text-foreground shadow-[0_12px_30px_-24px_rgb(36_59_186_/_0.22)] lg:sticky lg:max-h-[calc(100svh-9rem)] lg:overflow-y-auto"
       aria-label="Récapitulatif de votre visite"
     >
       <div className="ticket-summary-brand mb-10 flex items-center gap-[.65rem] [&_svg]:size-[2.8rem]">
@@ -48,7 +48,7 @@ export default function TicketSummary({ summary, onReset }) {
           </strong>
         </div>
       </div>
-      <div className="ticket-admission relative -mx-8 flex items-baseline justify-between border-t border-dashed border-[rgb(36_59_186_/_0.35)] px-8 pt-6 text-[.75rem]">
+      <div className="ticket-admission relative overflow-x-clip -mx-8 flex items-baseline justify-between border-t border-dashed border-[rgb(36_59_186_/_0.35)] px-8 pt-6 text-[.75rem]">
         <span>Entrées</span>
         <span className="text-[1.6rem] tracking-[-.04em]">
           {String(summary.visitors).padStart(2, "0")}{" "}

@@ -21,7 +21,7 @@ export default function SearchResults({ query, results, onNavigate }) {
               onClick={onNavigate}
             >
               <SearchThumbnail src={object.image} />
-              <span className="min-w-0">
+              <span className="min-w-0 break-words">
                 <SearchHighlight text={object.title} query={query} />
                 <small className="mt-[0.2rem] block text-[0.7rem] text-muted">
                   <SearchHighlight text={object.artist} query={query} />
