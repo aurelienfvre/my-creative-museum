@@ -108,7 +108,7 @@ Documentation : https://better-auth.com/docs/integrations/next
 
 1. Connecter Neon au projet depuis le Marketplace Vercel : https://vercel.com/marketplace/neon/neon. Vérifier que `DATABASE_URL` contient la chaîne PostgreSQL Neon avec pooling (`-pooler` dans le serveur), en conservant les paramètres TLS fournis par Neon.
 2. Garder `BETTER_AUTH_SECRET` (secret aléatoire privé) et définir `BETTER_AUTH_URL` sur l’origine HTTPS réelle du site. Retirer `AUTH_DATABASE_PATH` des variables Vercel : ce chemin ne sert qu’à SQLite local.
-3. Définir la **Build Command** sur `npm run build:vercel`. Elle applique les migrations SQL versionnées dans `drizzle/` avant le build. Le compte de base doit avoir les droits de création de tables.
+3. Le fichier `vercel.json` définit la **Build Command** `npm run build:vercel`. Elle applique les migrations SQL versionnées dans `drizzle/`, puis vérifie les cinq tables via la même `DATABASE_URL` que l’application avant le build. Le compte de base doit avoir les droits de création de tables.
 4. Pousser les modifications et redéployer. Utiliser une base distincte pour les previews et leur propre URL d’authentification ; ne pas leur partager la base de production.
 
 Les comptes SQLite locaux ne sont pas transférés automatiquement vers PostgreSQL. Les migrations ne sont jamais lancées lors d’une requête utilisateur. Ne pas lancer plusieurs migrations simultanées sur une même base.
@@ -126,3 +126,5 @@ Après une modification de la configuration qui change les tables : `npm run aut
 La génération du schéma est hors ligne et ne modifie pas Neon. La migration initiale suppose une base vide : si une ancienne version de l’application a déjà créé ses tables, ne pas les supprimer, préparer une migration de reprise avant déploiement. Les tables Drizzle utilisent des noms de colonnes en snake_case.
 
 Le mode SQLite local existant reste disponible sans `DATABASE_URL`, pour préserver les comptes locaux. Pour utiliser la même pile en développement et en production, renseigner l’URL d’une branche Neon de développement dans `.env.local`. Aucun service Neon Auth managé n’est nécessaire.
+
+Si les routes d’authentification renvoient `relation "rate_limit" does not exist`, la base utilisée par l’application n’a pas le schéma attendu. Déployer le code avec `vercel.json` et le dossier `drizzle/`. Les logs de build doivent montrer la migration puis « Schéma Better Auth vérifié sur la base utilisée par l’application ». `DATABASE_URL` et `DATABASE_URL_UNPOOLED` doivent viser la même base et branche Neon. Ne pas changer le secret pour corriger une table manquante.
