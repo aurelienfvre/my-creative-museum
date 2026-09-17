@@ -15,6 +15,12 @@ export default function PasswordField({ signup, className }) {
           name="password"
           type={visible ? "text" : "password"}
           autoComplete={signup ? "new-password" : "current-password"}
+          enterKeyHint="go"
+          onKeyDown={(event) => {
+            if (event.key !== "Enter" || event.nativeEvent.isComposing) return;
+            event.preventDefault();
+            if (!event.repeat) event.currentTarget.form?.requestSubmit();
+          }}
           required
           minLength={signup ? 8 : 1}
           maxLength={128}
