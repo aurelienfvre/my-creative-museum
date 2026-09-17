@@ -21,7 +21,8 @@ export function navigateTo(refs, href, router, options = {}) {
   const targetPath = new URL(href, window.location.href).pathname;
   refs.transitionKind.current = options.back
     ? "artwork-return"
-    : targetPath.startsWith("/oeuvres/")
+    : targetPath.startsWith("/oeuvres/") ||
+        ["/connexion", "/inscription", "/compte"].includes(targetPath)
       ? "artwork"
       : "page";
   refs.navigationPhase.current = "leaving";

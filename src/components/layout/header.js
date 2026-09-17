@@ -1,6 +1,7 @@
 "use client";
 import { useRef, useState } from "react";
 import TransitionLink from "@/components/animation/transition-link";
+import AccountLink from "@/components/auth/account-link";
 import Menu from "@/components/layout/menu";
 import Icon from "@/components/ui/icon";
 import MuseumLogo from "@/components/ui/museum-logo";
@@ -37,7 +38,7 @@ export default function Header({ objects }) {
           museum
         </span>
       </TransitionLink>
-      <div className="header-actions flex items-center gap-4 lg:gap-8">
+      <div className="header-actions flex items-center gap-2 lg:gap-8">
         <button
           type="button"
           className="search-button grid size-8 place-items-center [&>svg]:w-[1.2rem]"
@@ -46,6 +47,7 @@ export default function Header({ objects }) {
         >
           <Icon name="search" />
         </button>
+        <AccountLink />
         <Menu />
       </div>
       <SearchDialog

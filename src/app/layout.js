@@ -54,7 +54,7 @@ export default async function RootLayout({ children }) {
         <PageTransition
           navigation={<Header objects={objects.map(publicObject)} />}
         >
-          <div className="page-surface">
+          <div className="page-surface min-h-svh">
             <GSAPWrapper>{children}</GSAPWrapper>
           </div>
           <Footer />

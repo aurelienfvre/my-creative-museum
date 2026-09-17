@@ -93,3 +93,13 @@ Convention du projet : chaque module JavaScript dans `src/components/` reste à 
 Open Graph et Twitter utilisent `public/social/opengraph.png` (1200 × 630), avec titre, description et URL canonique propres à chaque page. Le SVG source est conservé à côté ; `node scripts/generate-social-images.mjs` régénère le PNG et l’icône Apple.
 
 Configurer `NEXT_PUBLIC_SITE_URL` avec l’URL publique définitive (par exemple dans `.env.local` et chez l’hébergeur). Sur Vercel, `VERCEL_PROJECT_PRODUCTION_URL` sert de valeur de repli ; en développement, les liens utilisent `http://localhost:3000`.
+
+### Authentification
+
+Better Auth gère les comptes email/mot de passe, les mots de passe hachés et les sessions par cookie. `/connexion` et `/inscription` sont publiques ; `/compte` vérifie la session côté serveur et redirige les visiteurs non connectés. L’icône de compte dans la navigation ouvre ce parcours.
+
+Configuration : copier `.env.example` en `.env.local`, générer un secret (`openssl rand -hex 32`) pour `BETTER_AUTH_SECRET`, puis définir `BETTER_AUTH_URL` sur l’origine du site. Ne jamais committer le secret. Exécuter `npm run auth:migrate` avant le premier démarrage et après une évolution du schéma Better Auth.
+
+La base SQLite locale est dans `data/auth.sqlite` (ignorée par Git). En hébergement Node, conserver ce dossier sur un volume persistant ; sur Vercel/serverless, remplacer SQLite local par une base distante persistante avant déploiement. Le parcours simple actuel ne comprend pas d’envoi d’email de vérification ni de réinitialisation de mot de passe.
+
+Documentation : https://better-auth.com/docs/integrations/next

@@ -45,3 +45,6 @@ work/
 
 # md files
 CHECKLIST.md
+/data/
+!.env.example
+.env.example
