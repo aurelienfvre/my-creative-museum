@@ -49,6 +49,7 @@ export default async function ArtworkPage({ params }) {
     <main id="main">
       <ArtworkOpening object={object} />
       <section
+        aria-labelledby="artwork-description-title"
         className="detail-content page-gutter grid grid-cols-1 gap-8 py-10 lg:grid-cols-[1fr_2fr] lg:gap-20 lg:pt-16 lg:pb-20"
         data-reveal
       >

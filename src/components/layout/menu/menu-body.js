@@ -1,6 +1,5 @@
 import Link from "next/link";
 import FlipText from "@/components/animation/flip-text";
-import Icon from "@/components/ui/icon";
 import MuseumLogo from "@/components/ui/museum-logo";
 
 const links = [
@@ -14,9 +13,6 @@ export default function MenuBody({ pathname, select }) {
   return (
     <div className="menu-body grid flex-1 grid-cols-1 items-center gap-8 py-8 lg:grid-cols-[1fr_1.7fr] lg:gap-12 lg:py-12">
       <div className="menu-aside hidden lg:block [&>svg]:my-8 [&>svg]:size-32 [&>svg]:rotate-[-10deg]">
-        <span className="eyebrow block font-mono text-[0.7rem] uppercase tracking-[0.08em]">
-          La curiosité vous va si bien.
-        </span>
         <MuseumLogo size={190} />
         <p className="text-[1.3rem]">
           Entrez.
@@ -41,7 +37,6 @@ export default function MenuBody({ pathname, select }) {
                 <FlipText>{link.label}</FlipText>
               </span>
             </span>
-            <Icon />
           </Link>
         ))}
       </nav>

@@ -3,7 +3,10 @@ import ArtworkImage from "./artwork-image";
 export default function ArtworkDescription({ object, gallery }) {
   return (
     <div className="art-description">
-      <h2 className="mb-6 text-[2.3rem] lg:text-[2.7rem]">
+      <h2
+        id="artwork-description-title"
+        className="mb-6 text-[2.3rem] lg:text-[2.7rem]"
+      >
         Au-delà du <em>premier regard.</em>
       </h2>
       <p className="language-note mb-6 text-[.68rem] text-muted">
