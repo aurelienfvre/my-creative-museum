@@ -1,5 +1,4 @@
-import nextEnv from "@next/env";
-import { createDatabase } from "../src/db";
+import { loadEnvConfig } from "@next/env";
 import {
   account,
   favorite,
@@ -10,12 +9,14 @@ import {
 } from "../src/db/schema";
 
 async function verifyDatabase() {
-  nextEnv.loadEnvConfig(process.cwd());
+  loadEnvConfig(process.cwd());
   const url = process.env.DATABASE_URL;
   if (!url)
     throw new Error(
       "DATABASE_URL manque : impossible de vérifier la base de l’application.",
     );
+  // Load local environment before evaluating the database module.
+  const { createDatabase } = await import("../src/db");
   const db = createDatabase(url);
   for (const [name, table] of Object.entries({
     user,
