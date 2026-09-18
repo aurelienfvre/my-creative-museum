@@ -28,14 +28,14 @@ export default async function Home() {
       <HomeMotion>
         <section className="home-cover page-gutter relative grid grid-cols-1 gap-8 pt-8 pb-12 lg:grid-cols-[0.95fr_1.1fr] lg:pt-12 lg:pb-20">
           <div className="home-cover-title z-1 pt-0 lg:pt-[1.3rem]">
-            <h1 className="text-[5.3rem] leading-none tracking-[-0.075em] font-normal text-foreground lg:text-[8.6rem]">
+            <h1 className="flex flex-col text-[5.3rem] leading-[1] tracking-[-0.075em] font-normal text-foreground lg:text-[8.6rem]">
               <span className="line-mask">
                 <span data-hero-line>L’art.</span>
               </span>
               <span className="line-mask">
                 <span data-hero-line>À votre</span>
               </span>
-              <span className="line-mask">
+              <span className="line-mask -mt-[0.3em]!">
                 <span data-hero-line>
                   <em className="font-editorial font-normal tracking-[-0.045em]">
                     façon.

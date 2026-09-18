@@ -2,6 +2,7 @@ import nextEnv from "@next/env";
 import { createDatabase } from "../src/db";
 import {
   account,
+  favorite,
   rateLimit,
   session,
   user,
@@ -20,6 +21,7 @@ async function verifyDatabase() {
     user,
     session,
     account,
+    favorite,
     verification,
     rateLimit,
   })) {

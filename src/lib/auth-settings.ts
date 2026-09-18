@@ -10,6 +10,9 @@ export const authSettings = {
     minPasswordLength: 8,
     maxPasswordLength: 128,
   },
+  user: {
+    changeEmail: { enabled: true, updateEmailWithoutVerification: true },
+  },
   rateLimit: { enabled: true, storage: "database" },
   plugins: [nextCookies()],
 } satisfies BetterAuthOptions;

@@ -1,130 +1,36 @@
-# My Creative Museum
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-Projet ECV sous Next.js App Router, JavaScript, Tailwind v4, Geist et Instrument Serif.
+## Getting Started
 
-## Démarrer
+First, run the development server:
 
-Node.js >= 20.9. `npm ci`, puis `npm run dev`. L’aperçu en cours utilise `npm run dev -- --port 3001`.
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
 
-`npm run build` produit le build de production ; `npm start` le sert. `npm run lint` vérifie le code et `npm run format` le formate.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Pages et rendu
+You can start editing the page by modifying `src/app/page.js`. The page auto-updates as you edit the file.
 
-- `/` : accueil éditorial, sélection de trois œuvres, à propos. Rendu statique régénéré après une heure (ISR).
-- `/collection` : recherche instantanée, filtres artiste/mouvement et tri. Métadonnées rendues à la demande à partir de `searchParams` (SSR) ; données API mises en cache une heure. Les filtres clients sont reflétés dans l’URL et combinables.
-- `/oeuvres/[slug]` : 29 routes préconstruites via `generateStaticParams`, puis ISR. Métadonnées propres à chaque œuvre, notice, galerie, musée source et trois œuvres liées.
-- `/billetterie` : page prérendue et calculateur client. Tarifs du brief, groupes dès 11 personnes, options limitées au nombre de visiteurs, gratuité des moins de 5 ans.
-- `loading.js`, `error.js`, `not-found.js` : chargement, erreur récupérable et œuvre inconnue.
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Animations et absence de flash
+## Learn More
 
-- `src/stores/use-museum-store.js` : Zustand, `isFirstRender` et `isTransitionActive`.
-- `src/lib/gsap.js` : enregistrement centralisé de `useGSAP`, `ScrollTrigger`, `CustomEase`.
-- `src/components/animation/page-transition.js` : preloader présent et opaque dès le HTML serveur. Le petit logo se dessine, la signature apparaît, puis le panneau quitte l’écran. Attente des polices et du décodage de la première image, avec limite de temps. Les tracés sont masqués dans le CSS initial, sans apparition préalable du logo complet.
-- La première arrivée est lancée sous le panneau pour éviter de montrer un élément avant son animation. Le preloader est joué au chargement du document, une seule fois durant la navigation interne. Il n’est pas persisté entre rechargements.
-- `TransitionLink` respecte les clics modifiés, les nouveaux onglets et les ancres. La navigation attend le callback de fin d’animation, sans temporisation arbitraire. Comme sur le portfolio, la page se réduit, sort à gauche, puis la suivante arrive de droite et reprend sa taille. Un délai de secours libère le panneau si une navigation échoue.
-- `GSAPWrapper` limite ses sélecteurs à son scope : `data-arrive` pour les arrivées et `data-reveal` pour les révélations au scroll. Les animations et ScrollTriggers sont nettoyés via `useGSAP`/`matchMedia`. Callbacks différés enveloppés par `contextSafe`.
-- Le mode `prefers-reduced-motion` évite les mouvements. Sans JavaScript, le preloader est retiré via `noscript`. Un secours CSS le retire également si le JavaScript ne se charge pas.
-- Dimensions des images réservées pour limiter les déplacements de mise en page.
+To learn more about Next.js, take a look at the following resources:
 
-## Direction artistique
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-Papier clair, bleu encre, accents olive, grands blancs et typographie éditoriale. Nouveau M double tracé à main levée : logo React animable, SVG autonome et favicon. Les œuvres conservent une place centrale.
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-La base de rem demandée est conservée dans `@layer base` : viewport / 390 × 16 sur mobile, viewport / 1440 × 16 dès 1024 px, le même ratio desktop sur les écrans ultrawide (le plafond fixe a été retiré à la demande de l’utilisateur). Elle redimensionne textes et espacements ensemble. Geist est déclarée sur `html` via `next/font` et réutilisée dans les tokens Tailwind.
+## Deploy on Vercel
 
-## Données et limites
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Les données proviennent de https://api-museum.vercel.app/objects et `/objects/{slug}`. L’API retourne maintenant une enveloppe `objects` et des informations de pagination : l’adaptateur la prend en charge. Les champs absents et erreurs réseau sont traités. Les descriptions HTML sont nettoyées côté serveur avec une liste explicite de balises autorisées.
-
-Les miniatures Wikimedia de tailles arbitraires (2560/1920 px dans l’API) sont normalisées à 1280 px. Certaines images peuvent être temporairement limitées par leur hébergeur (HTTP 429) : une indication remplace alors l’image, sans bloquer la visite. Les images sont servies via Next Image avec domaines autorisés et chargement différé hors premier écran.
-
-Les notices restent en anglais, comme dans l’API. La billetterie est une simulation de calcul : aucune commande, aucun paiement ni billet réel. La connexion réseau est nécessaire pour le premier build (API et polices). Aucun secret n’est requis.
-
-## Références du cours consultées
-
-Sujet : https://deluxe-breeze-6a8.notion.site/M2-DEV-Projet-Mus-e-26c85fcf2f3780e783e4ca3acf9b2a9c
-
-Sous-pages consultées : API Museum ; store global Zustand ; modes SSR/SSG/ISR ; passage Pages Router vers App Router (page contenant une vidéo) ; conventions Next ; params/searchParams ; GSAP wrapper ; TransitionLink ; Page transition ; bases GSAP ; système de filtres.
-
-Adaptations à Next 16 : `params`/`searchParams` asynchrones et cache de fetch explicite. Les exemples du cours utilisent parfois Next 14, dont les valeurs par défaut diffèrent. Les filtres sont dérivés des paramètres actifs plutôt que stockés une seconde fois, ce qui évite la désynchronisation.
-
-La publication Vercel, le dépôt distant et le retour critique personnel demandés en livrables par le cours restent à préparer. Ce projet reste local à ce stade.
-
-## Interactions ajoutées
-
-- `Media` reprend le composant fourni : `forwardRef`, détection vidéo (y compris URL avec query), `NextImage`, `preload`, `sizes` corrigé et props de positionnement. Toutes les reproductions passent par ce composant. `ArtworkImage` réserve l’espace et déclenche l’apparition après décodage, avec CSS masqué dès le serveur.
-- `FlipText` : deux faces par lettre, translation et rotation 3D en vague via `useGSAP`, au pointeur comme au focus. Les deux faces visuelles sont masquées aux lecteurs d’écran ; le libellé n’est lu qu’une fois. Les icônes restent fixes.
-- `Menu` : bouton MENU et SVG à deux traits décalés, disponible sur desktop et mobile. Volet entrant par la droite et sortant à gauche, liens vers toutes les pages, fermeture Échap et restauration du focus.
-- `CustomCursor` : remplace le pointeur natif par une croix de 24 px ; scale à 0.6 et rotation de 45° sur les liens/boutons ; capsule « Voir l’œuvre » sur les tableaux. Désactivé sur écran tactile et en mouvement réduit. Le curseur natif revient dans les champs de saisie et au clavier.
-- Footer en arrière-plan, découvert par le contenu au scroll ; le mode sticky n’est activé que lorsque le footer tient dans la fenêtre.
-
-Le portfolio local a été consulté en lecture seule. La transition Astro View Transitions a été adaptée en GSAP pour cet App Router. Les bases visuelles retenues parmi les références fournies sont le grand menu, les compositions éditoriales et les micro-interactions ; aucun contenu de ces sites n’est repris.
-
-## Vérification de cette version
-
-Build de production réussi avec les 29 fiches préconstruites ; réponses serveur vérifiées pour l’accueil, la collection filtrée, la billetterie et une fiche. Calculs de billets vérifiés (tarifs, groupe, gratuité, options bornées). Une image Wikimedia peut encore répondre HTTP 429 ; ce cas affiche une indication et ne bloque pas le chargement. Recette navigateur effectuée : navigation accueil → collection → œuvre, recherche Monet avec Entrée, menu mobile et focus clavier, panier adulte + audioguide (26 €). Contrôles de largeur à 320, 390 et 3440 px sans débordement horizontal sur les pages inspectées. `npm test` exécute 22 tests de données et de régression GSAP, dont 25 cycles de nettoyage des contextes. Le survol précis du curseur reste à apprécier à la souris.
-
-
-## Organisation du code
-
-- `src/app/` : routes Next.js, layout racine et styles globaux.
-- `src/components/layout/` : header, menu et footer partagés.
-- `src/components/animation/` : transitions, scroll, curseur et animations de texte.
-- `src/components/ui/` : primitives réutilisables (icônes, logo, médias).
-- `src/components/artwork/` : cartes et images des œuvres.
-- `src/components/home/` : hero animé, galerie et cylindre Three.js.
-- `src/components/collection/` : recherche, filtres et grille de la collection.
-- `src/components/billetterie/` : calculateur et présentation du billet.
-- `src/lib/` : accès API, calculs, recherche et configuration GSAP.
-- `src/contexts/` : action de navigation animée partagée par les liens, le menu et la recherche.
-- `src/stores/` : état partagé Zustand.
-- `work/qa/` : tests de données et de régression, exécutés par `npm test`.
-
-Les styles propres à un composant restent dans son dossier. Les imports utilisent `@/` et pointent directement vers le fichier concerné.
-
-### Taille des composants
-
-Convention du projet : chaque module JavaScript dans `src/components/` reste à 100 lignes maximum après formatage. Extraire les blocs d’interface en sous-composants et la logique en hooks ou modules spécialisés ; ne pas compresser le code pour contourner cette limite. Les animations conservent un propriétaire unique et leurs fonctions de nettoyage. `npm test` contrôle automatiquement cette règle.
-
-
-## Partage et métadonnées
-
-Open Graph et Twitter utilisent `public/social/opengraph.png` (1200 × 630), avec titre, description et URL canonique propres à chaque page. Le SVG source est conservé à côté ; `node scripts/generate-social-images.mjs` régénère le PNG et l’icône Apple.
-
-Configurer `NEXT_PUBLIC_SITE_URL` avec l’URL publique définitive (par exemple dans `.env.local` et chez l’hébergeur). Sur Vercel, `VERCEL_PROJECT_PRODUCTION_URL` sert de valeur de repli ; en développement, les liens utilisent `http://localhost:3000`.
-
-### Authentification
-
-Better Auth gère les comptes email/mot de passe, les mots de passe hachés et les sessions par cookie. `/connexion` et `/inscription` sont publiques ; `/compte` vérifie la session côté serveur et redirige les visiteurs non connectés. L’icône de compte dans la navigation ouvre ce parcours.
-
-Configuration : copier `.env.example` en `.env.local`, générer un secret (`openssl rand -hex 32`) pour `BETTER_AUTH_SECRET`, puis définir `BETTER_AUTH_URL` sur l’origine du site. Ne jamais committer le secret. Exécuter `npm run auth:migrate` avant le premier démarrage et après une évolution du schéma Better Auth.
-
-La base SQLite locale est dans `data/auth.sqlite` (ignorée par Git). En hébergement Node, conserver ce dossier sur un volume persistant. Si `DATABASE_URL` est renseignée, Better Auth utilise Drizzle ORM avec le driver HTTP Neon/PostgreSQL à la place ; sur Vercel cette variable est obligatoire. Le parcours simple actuel ne comprend pas d’envoi d’email de vérification ni de réinitialisation de mot de passe.
-
-Documentation : https://better-auth.com/docs/integrations/next
-
-### Authentification sur Vercel
-
-1. Connecter Neon au projet depuis le Marketplace Vercel : https://vercel.com/marketplace/neon/neon. Vérifier que `DATABASE_URL` contient la chaîne PostgreSQL Neon avec pooling (`-pooler` dans le serveur), en conservant les paramètres TLS fournis par Neon.
-2. Garder `BETTER_AUTH_SECRET` (secret aléatoire privé) et définir `BETTER_AUTH_URL` sur l’origine HTTPS réelle du site. Retirer `AUTH_DATABASE_PATH` des variables Vercel : ce chemin ne sert qu’à SQLite local.
-3. Le fichier `vercel.json` définit la **Build Command** `npm run build:vercel`. Elle applique les migrations SQL versionnées dans `drizzle/`, puis vérifie les cinq tables via la même `DATABASE_URL` que l’application avant le build. Le compte de base doit avoir les droits de création de tables.
-4. Pousser les modifications et redéployer. Utiliser une base distincte pour les previews et leur propre URL d’authentification ; ne pas leur partager la base de production.
-
-Les comptes SQLite locaux ne sont pas transférés automatiquement vers PostgreSQL. Les migrations ne sont jamais lancées lors d’une requête utilisateur. Ne pas lancer plusieurs migrations simultanées sur une même base.
-
-### Drizzle + Neon (consigne Auth)
-
-- `src/db/auth-schema.ts` : généré par la CLI Better Auth, ne pas modifier à la main.
-- `src/db/schema.ts` : ré-export du schéma, point d’entrée des futures tables métier.
-- `src/db/index.ts` : connexion Drizzle avec `@neondatabase/serverless`.
-- `src/lib/auth-settings.ts` : options partagées par le serveur et le générateur (email/mot de passe, limite de requêtes, cookies Next.js).
-- `drizzle.config.ts` : charge `.env.local` et conserve la priorité aux variables de Vercel. Les migrations utilisent `DATABASE_URL_UNPOOLED` si disponible, sinon `DATABASE_URL`.
-
-Après une modification de la configuration qui change les tables : `npm run auth:generate`, puis `npm run db:generate`. Relire et committer le SQL généré avec le schéma, puis `npm run db:migrate` pour l’appliquer. `npm run db:push` est réservé à une base de développement ; `npm run db:studio` ouvre l’explorateur.
-
-La génération du schéma est hors ligne et ne modifie pas Neon. La migration initiale suppose une base vide : si une ancienne version de l’application a déjà créé ses tables, ne pas les supprimer, préparer une migration de reprise avant déploiement. Les tables Drizzle utilisent des noms de colonnes en snake_case.
-
-Le mode SQLite local existant reste disponible sans `DATABASE_URL`, pour préserver les comptes locaux. Pour utiliser la même pile en développement et en production, renseigner l’URL d’une branche Neon de développement dans `.env.local`. Aucun service Neon Auth managé n’est nécessaire.
-
-Si les routes d’authentification renvoient `relation "rate_limit" does not exist`, la base utilisée par l’application n’a pas le schéma attendu. Déployer le code avec `vercel.json` et le dossier `drizzle/`. Les logs de build doivent montrer la migration puis « Schéma Better Auth vérifié sur la base utilisée par l’application ». `DATABASE_URL` et `DATABASE_URL_UNPOOLED` doivent viser la même base et branche Neon. Ne pas changer le secret pour corriger une table manquante.
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

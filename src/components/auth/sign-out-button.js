@@ -1,6 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import FlipText from "@/components/animation/flip-text";
 import { authClient } from "@/lib/auth-client";
 export default function SignOutButton() {
   const router = useRouter();
@@ -20,14 +21,14 @@ export default function SignOutButton() {
     }
   };
   return (
-    <div className="mt-10">
+    <div>
       <button
         type="button"
         disabled={pending}
         onClick={signOut}
-        className="min-h-12 border border-foreground px-6 py-3 text-foreground transition-colors hover:bg-foreground hover:text-background"
+        className="text-link min-h-12 text-foreground"
       >
-        {pending ? "Déconnexion…" : "Se déconnecter"}
+        <FlipText>{pending ? "Déconnexion…" : "Se déconnecter"}</FlipText>
       </button>
       {error && (
         <p role="alert" className="mt-4 text-sm text-red-800">

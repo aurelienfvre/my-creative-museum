@@ -1,3 +1,4 @@
+import FavoriteButton from "@/components/favorites/favorite-button";
 import ArtworkBackButton from "./artwork-back-button";
 import ArtworkImage from "./artwork-image";
 export default function ArtworkOpening({ object }) {
@@ -17,6 +18,9 @@ export default function ArtworkOpening({ object }) {
         >
           <span>{object.artist}</span>
           <span className="text-[.8rem] text-muted">{object.year}</span>
+        </div>
+        <div className="mt-8" data-arrive>
+          <FavoriteButton slug={object.slug} />
         </div>
         <span
           className="artwork-movement mt-auto pt-6 text-[.75rem] text-muted lg:pt-12"

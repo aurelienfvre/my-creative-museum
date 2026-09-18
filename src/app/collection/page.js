@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import Collection from "@/components/collection/collection";
+import CollectionSkeleton from "@/components/loading/collection-skeleton";
 import { pageMetadata } from "@/lib/metadata";
 import { getObjects, publicObject } from "@/lib/museum";
 export async function generateMetadata({ searchParams }) {
@@ -26,9 +27,7 @@ export default async function CollectionPage() {
           </span>
         </h1>
       </section>
-      <Suspense
-        fallback={<p className="page-gutter">Préparation de la collection…</p>}
-      >
+      <Suspense fallback={<CollectionSkeleton />}>
         <Collection objects={objects.map(publicObject)} />
       </Suspense>
     </main>

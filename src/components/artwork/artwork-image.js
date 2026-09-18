@@ -1,6 +1,7 @@
 "use client";
 import { useRef, useState } from "react";
 import Media from "@/components/ui/media";
+import Skeleton from "@/components/ui/skeleton";
 import { gsap, useGSAP } from "@/lib/gsap";
 
 export default function ArtworkImage({
@@ -12,6 +13,7 @@ export default function ArtworkImage({
   sizes = "(max-width: 1023px) 90vw, 45vw",
   contain = false,
 }) {
+  const [loadedSrc, setLoadedSrc] = useState(null);
   const [failed, setFailed] = useState(false);
   const container = useRef(null);
   const media = useRef(null);
@@ -24,6 +26,7 @@ export default function ArtworkImage({
       const reveal = contextSafe(() => {
         if (cancelled || revealed) return;
         revealed = true;
+        setLoadedSrc(src);
         gsap.to(image, {
           autoAlpha: 1,
           duration: window.matchMedia("(prefers-reduced-motion: reduce)")
@@ -59,6 +62,9 @@ export default function ArtworkImage({
       ref={container}
       className={`artwork-image relative overflow-hidden bg-[#e3e3d8] ${className}`}
     >
+      {src && !failed && loadedSrc !== src && (
+        <Skeleton className="absolute inset-0" />
+      )}
       {src && !failed ? (
         <Media
           ref={media}

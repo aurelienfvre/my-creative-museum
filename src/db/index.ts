@@ -6,7 +6,10 @@ export function createDatabase(connectionString: string) {
   return drizzle(neon(connectionString), { schema });
 }
 
-// SQLite remains available locally until a Neon development branch is connected.
-export const db = process.env.DATABASE_URL
-  ? createDatabase(process.env.DATABASE_URL)
-  : null;
+const connectionString = process.env.DATABASE_URL;
+if (!connectionString) {
+  throw new Error(
+    "DATABASE_URL est obligatoire : configurez votre base PostgreSQL Neon dans .env.local ou Vercel.",
+  );
+}
+export const db = createDatabase(connectionString);
