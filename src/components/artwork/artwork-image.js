@@ -12,6 +12,7 @@ export default function ArtworkImage({
   className = "",
   sizes = "(max-width: 1023px) 90vw, 45vw",
   contain = false,
+  naturalRatio = false,
 }) {
   const [loadedSrc, setLoadedSrc] = useState(null);
   const [failed, setFailed] = useState(false);
@@ -37,6 +38,8 @@ export default function ArtworkImage({
         });
       });
       const loaded = () => {
+        if (naturalRatio && image.naturalWidth)
+          container.current.style.aspectRatio = `${image.naturalWidth} / ${image.naturalHeight}`;
         if (image instanceof HTMLImageElement && image.decode)
           image.decode().then(reveal).catch(reveal);
         else reveal();
@@ -55,7 +58,11 @@ export default function ArtworkImage({
         image.removeEventListener("loadeddata", loaded);
       };
     },
-    { scope: container, dependencies: [src, failed], revertOnUpdate: true },
+    {
+      scope: container,
+      dependencies: [src, failed, naturalRatio],
+      revertOnUpdate: true,
+    },
   );
   return (
     <div

@@ -22,12 +22,6 @@ export default function ArtworkOpening({ object }) {
         <div className="mt-8" data-arrive>
           <FavoriteButton slug={object.slug} />
         </div>
-        <span
-          className="artwork-movement mt-auto pt-6 text-[.75rem] text-muted lg:pt-12"
-          data-arrive
-        >
-          {object.movement}
-        </span>
       </div>
       <div
         className="artwork-opening-image [&_.artwork-image]:h-[55svh] [&_.artwork-image]:min-h-0 [&_.artwork-image]:bg-transparent lg:[&_.artwork-image]:h-[70vh] lg:[&_.artwork-image]:min-h-[38rem]"
