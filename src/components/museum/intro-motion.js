@@ -21,14 +21,14 @@ export function animateMuseumIntro(root, contextSafe, motion) {
     timeline = gsap.timeline({
       onUpdate: () => {
         motion.progress = imageEase(
-          gsap.utils.clamp(0, 1, (timeline.time() - 2.7) / 1.35),
+          gsap.utils.clamp(0, 1, (timeline.time() - 2.65) / 1.15),
         );
       },
       scrollTrigger: {
         trigger: root,
         start: "top top",
         end: "bottom bottom",
-        scrub: 0.35,
+        scrub: 0.25,
         onUpdate: (self) => {
           motion.velocity = gsap.utils.clamp(
             -0.6,
@@ -52,10 +52,10 @@ export function animateMuseumIntro(root, contextSafe, motion) {
       .fromTo(
         image,
         Flip.fit(image, initial, { getVars: true }),
-        { ...expanded, duration: 0.7, ease: "sine.inOut" },
-        1.25,
+        { ...expanded, duration: 0.9, ease: "sine.inOut" },
+        1.15,
       )
-      .to(image, { ...settled, duration: 1.35, ease: "sine.inOut" }, 2.7)
+      .to(image, { ...settled, duration: 1.15, ease: "sine.inOut" }, 2.65)
       .addLabel("portrait-settled");
     animateMuseumStory(timeline, root);
     timeline.progress(position);

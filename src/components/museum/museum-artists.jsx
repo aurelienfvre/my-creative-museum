@@ -36,18 +36,22 @@ export default function MuseumArtists({ chapters }) {
           >
             <p
               data-chapter-title
-              className="text-center font-semibold origin-top text-[clamp(2.5rem,8vw,9rem)] leading-[.95] tracking-[-.06em] motion-safe:absolute motion-safe:inset-x-0 motion-safe:top-[max(7svh,7rem)]"
+              className="text-[9vw] lg:text-[clamp(36px,min(8vw,13svh),180px)] motion-reduce:mt-[24px] text-center font-semibold origin-top  leading-[.95] tracking-[-.06em] motion-safe:absolute motion-safe:inset-x-0 motion-safe:top-[10%]"
             >
               {title}
             </p>
             <div
               data-chapter-pictures
-              className="mx-auto mt-10 flex w-fit max-w-[94%] items-start justify-center gap-2 motion-safe:absolute motion-safe:inset-x-0 motion-safe:top-[32%] motion-safe:mt-0"
+              className="mx-auto mt-10 flex w-fit max-w-[92%] lg:max-w-[94%] items-start justify-center gap-[clamp(12px,1.2vw,28px)] motion-safe:absolute motion-safe:inset-x-0 motion-safe:top-[36%] motion-safe:lg:top-[33%] motion-safe:mt-0"
             >
               {works.map((work, index) => (
                 <figure
                   key={work.slug}
-                  className={index ? "mt-5 shrink-0" : "shrink-0 text-right"}
+                  className={
+                    index
+                      ? "mt-[3svh] min-w-0 max-w-[38vw]"
+                      : "min-w-0 max-w-[38vw] text-right"
+                  }
                 >
                   <TransitionLink
                     href={`/oeuvres/${work.slug}`}
@@ -59,12 +63,12 @@ export default function MuseumArtists({ chapters }) {
                       contain
                       eager
                       naturalRatio
-                      className="aspect-square h-[min(24svh,29vw)] bg-transparent! lg:h-[28svh]"
+                      className="aspect-square max-w-full h-[min(26svh,35vw)] lg:h-[min(27svh,22vw)] bg-transparent!"
                       sizes="(max-width: 1023px) 43vw, 24vw"
                     />
-                    <figcaption className="mt-1 w-0 min-w-full text-sm leading-snug">
+                    <figcaption className="text-[13px] lg:text-[clamp(13px,min(1.2vw,1.9svh),22px)] mt-[12px] w-0 min-w-full leading-[1.35]">
                       <span>{work.title}</span>
-                      <span className="mt-1 block text-muted">
+                      <span className="mt-[6px] block text-muted">
                         {work.artist} · {work.year}
                       </span>
                     </figcaption>
@@ -72,7 +76,7 @@ export default function MuseumArtists({ chapters }) {
                 </figure>
               ))}
             </div>
-            <h2 className="pointer-events-none z-20 origin-bottom text-center font-editorial text-[clamp(3.5rem,14vw,16rem)]! leading-[1.05]! tracking-[-.055em] text-foreground motion-safe:absolute motion-safe:inset-x-0 motion-safe:bottom-[14svh]">
+            <h2 className="text-[15vw] lg:text-[clamp(52px,min(14vw,19svh),270px)] motion-reduce:mt-[32px] pointer-events-none z-20 origin-bottom text-center font-editorial leading-[1.05]! tracking-[-.055em] text-foreground motion-safe:absolute motion-safe:inset-x-0 motion-safe:bottom-[19svh] motion-safe:lg:bottom-[12svh]">
               {artist}
             </h2>
           </article>
@@ -86,7 +90,7 @@ export default function MuseumArtists({ chapters }) {
             data-chapter-message={key}
             className="page-gutter flex items-center justify-center py-24 text-center motion-safe:pointer-events-none motion-safe:invisible motion-safe:absolute motion-safe:inset-0"
           >
-            <p className="max-w-4xl text-[clamp(2rem,5vw,5rem)] leading-tight tracking-tight">
+            <p className="max-w-4xl text-[clamp(28px,min(5vw,7svh),100px)] leading-tight tracking-tight">
               {line}
               <br />
               <em className="font-editorial text-foreground">{emphasis}</em>

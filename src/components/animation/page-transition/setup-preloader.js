@@ -1,7 +1,5 @@
 import { gsap } from "@/lib/gsap";
 import { useMuseumStore } from "@/stores/use-museum-store";
-import { exitPreloader } from "./preloader-exit";
-import { drawPreloaderLogo } from "./preloader-logo";
 export function setupPreloader(refs, contextSafe) {
   if (!useMuseumStore.getState().isFirstRender) return;
   let disposed = false;
@@ -59,4 +57,52 @@ export function setupPreloader(refs, contextSafe) {
     content.inert = false;
     document.documentElement.style.overflow = previousOverflow;
   };
+}
+
+function exitPreloader(preloader, reduced, unlock) {
+  gsap
+    .timeline({
+      onComplete: () => {
+        gsap.set(preloader.current, { autoAlpha: 0 });
+        unlock();
+      },
+    })
+    .to(".preloader-signature", {
+      opacity: 0,
+      y: reduced ? 0 : -12,
+      duration: reduced ? 0 : 0.3,
+    })
+    .to(
+      preloader.current,
+      {
+        yPercent: reduced ? 0 : -100,
+        duration: reduced ? 0 : 0.8,
+        ease: "curtain",
+      },
+      reduced ? 0 : "-=0.05",
+    );
+}
+
+function drawPreloaderLogo(reduced) {
+  // Le panneau est déjà opaque dans le HTML serveur : rien ne clignote avant l’hydratation.
+  gsap.set(".preloader .logo-stroke", {
+    strokeDasharray: 1,
+    strokeDashoffset: reduced ? 0 : 1,
+  });
+  const logo = gsap.timeline();
+  logo
+    .to(".preloader .logo-stroke", {
+      strokeDashoffset: 0,
+      stagger: reduced ? 0 : 0.13,
+      duration: reduced ? 0 : 1.05,
+      ease: "power2.inOut",
+    })
+    .fromTo(
+      ".preloader-name",
+      { opacity: 0, y: reduced ? 0 : 8 },
+      { opacity: 1, y: 0, duration: reduced ? 0 : 0.5 },
+      reduced ? 0 : 0.65,
+    );
+
+  return logo;
 }

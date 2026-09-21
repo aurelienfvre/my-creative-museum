@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { authClient } from "@/lib/auth-client";
 import { setFavorite } from "@/lib/favorites/actions";
+import { updateFavoriteOptimistically } from "@/lib/favorites/optimistic.mjs";
 
 export default function useFavorite(slug, initialSaved, onChange) {
   const { data: session, isPending: sessionPending } = authClient.useSession();
@@ -44,15 +45,15 @@ export default function useFavorite(slug, initialSaved, onChange) {
     setPending(true);
     setError("");
     try {
-      const result = await setFavorite(slug, !saved);
-      if (result.error) {
-        setError(result.error);
-        return;
-      }
-      setSaved(result.saved);
-      onChange?.(result.saved);
-    } catch {
-      setError("Impossible d’enregistrer ce changement. Réessayez.");
+      await updateFavoriteOptimistically(
+        saved,
+        (next) => setFavorite(slug, next),
+        (next, feedback) => {
+          setSaved(next);
+          setError(feedback.error || "");
+          onChange?.(next, feedback);
+        },
+      );
     } finally {
       lock.current = false;
       setPending(false);

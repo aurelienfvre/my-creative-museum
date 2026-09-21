@@ -11,7 +11,7 @@ export function animateMuseumStory(timeline, root) {
       { y: 0 },
       {
         y: () => -root.querySelector("section").clientHeight * 2.8,
-        duration: 1.25,
+        duration: 1.15,
         ease: "none",
       },
       0,
@@ -19,23 +19,23 @@ export function animateMuseumStory(timeline, root) {
     .to(
       root.querySelector("[data-art-stream]"),
       { autoAlpha: 0, duration: 0.2 },
-      1.05,
+      0.92,
     );
   for (const [selector, enter, leave] of [
-    ["[data-story-detail]", 0.3, 1.05],
-    ["[data-story-perspective]", 1.98, 2.5],
+    ["[data-story-detail]", 0.35, 0.86],
+    ["[data-story-perspective]", 2.02, 2.4],
   ]) {
     const text = root.querySelector(selector);
     timeline.fromTo(
       text,
-      { autoAlpha: 0, y: 28 },
-      { autoAlpha: 1, y: 0, duration: 0.16, ease: "sine.out" },
+      { autoAlpha: 0, y: 36 },
+      { autoAlpha: 1, y: 0, duration: 0.26, ease: "sine.inOut" },
       enter,
     );
     if (leave !== null)
       timeline.to(
         text,
-        { autoAlpha: 0, y: -18, duration: 0.16, ease: "sine.in" },
+        { autoAlpha: 0, y: -28, duration: 0.24, ease: "sine.inOut" },
         leave,
       );
   }
@@ -44,9 +44,9 @@ export function animateMuseumStory(timeline, root) {
     root.querySelector("[data-story-ending]"),
     {
       autoAlpha: 0,
-      y: () => root.querySelector("section").clientHeight * 0.16,
+      y: () => root.querySelector("section").clientHeight * 0.09,
     },
-    { autoAlpha: 1, y: 0, duration: 0.35, ease: "power2.out" },
+    { autoAlpha: 1, y: 0, duration: 0.38, ease: "sine.inOut" },
     "portrait-settled",
   );
 }

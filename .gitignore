@@ -12,6 +12,10 @@
 
 # testing
 /coverage
+tests/
+__tests__/
+*.test.*
+*.spec.*
 
 # next.js
 /.next/
@@ -44,7 +48,8 @@ next-env.d.ts
 #test
 work/
 
-# md files
+# Documentation de travail locale
+/docs/
 CHECKLIST.md
 
 # Bases locales et journaux SQLite
