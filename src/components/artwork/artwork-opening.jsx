@@ -20,7 +20,7 @@ export default function ArtworkOpening({ object }) {
           <span className="text-[.8rem] text-muted">{object.year}</span>
         </div>
         <div className="mt-8" data-arrive>
-          <FavoriteButton slug={object.slug} />
+          <FavoriteButton slug={object.slug} title={object.title} />
         </div>
       </div>
       <div

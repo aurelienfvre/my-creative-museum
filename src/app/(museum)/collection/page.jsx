@@ -15,7 +15,7 @@ export async function generateMetadata({ searchParams }) {
 export default async function CollectionPage() {
   const objects = await getObjects();
   return (
-    <main id="main">
+    <main id="main" tabIndex={-1}>
       <section className="collection-cover page-gutter pt-12 pb-10 lg:pt-16 lg:pb-16">
         <h1
           className="flex items-start gap-[.4rem] text-[3.8rem] leading-none font-normal tracking-[-.075em] text-foreground lg:gap-4 lg:text-[16rem]"

@@ -24,12 +24,13 @@ export default function FavoritesGallery({ objects }) {
       <div className="mb-10 flex flex-wrap items-baseline gap-4" data-reveal>
         <h2
           id="favorites-title"
+          tabIndex={-1}
           className="text-[2.8rem] leading-none tracking-[-.055em] text-foreground lg:text-[5rem]"
         >
           Mes <em className="font-editorial font-normal">favoris.</em>
         </h2>
         <span aria-live="polite" className="text-sm text-muted">
-          ({visible.length})
+          ({visible.length} favori{visible.length > 1 ? "s" : ""})
         </span>
       </div>
       {error && (
@@ -82,6 +83,14 @@ function FavoriteCard({ object, index, onRemove, onRestore }) {
       return;
     }
     if (!feedback.pending) return;
+    if (ref.current?.contains(document.activeElement)) {
+      const sibling =
+        ref.current.nextElementSibling || ref.current.previousElementSibling;
+      const target =
+        sibling?.querySelector("button, a") ||
+        document.getElementById("favorites-title");
+      target?.focus({ preventScroll: true });
+    }
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       onRemove(object.slug);
       return;
@@ -100,6 +109,7 @@ function FavoriteCard({ object, index, onRemove, onRestore }) {
       <div className="mt-5">
         <FavoriteButton
           slug={object.slug}
+          title={object.title}
           initialSaved
           onChange={changed}
           compact

@@ -79,7 +79,7 @@ export function startMuseumImage(root, src, motion) {
   return () => {
     disposed = true;
     image.removeAttribute("aria-hidden");
-    canvas.removeAttribute("aria-hidden");
+    canvas.setAttribute("aria-hidden", "true");
     observer.disconnect();
     visibility.disconnect();
     stage.removeEventListener("pointermove", move);

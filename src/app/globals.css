@@ -4,7 +4,7 @@
   --background: #f6f4ed;
   --foreground: #243bba;
   --ink: #232821;
-  --muted: #72756c;
+  --muted: #686c63;
   --line: #d8dacd;
   --accent: #dce4fa;
   --font-editorial: var(--font-museum-editorial), Georgia, serif;
@@ -101,7 +101,7 @@
   *,
   *::before,
   *::after {
-    @apply scroll-auto! duration-[.01ms]!;
+    @apply scroll-auto! duration-[.01ms]! [animation-duration:.01ms]! [animation-iteration-count:1]!;
   }
 }
 @media (hover: hover) and (pointer: fine) and (

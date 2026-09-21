@@ -27,7 +27,7 @@ export default async function MuseumPage() {
     }))
     .filter((chapter) => chapter.works.length === 2);
   return (
-    <main id="main">
+    <main id="main" tabIndex={-1}>
       <MuseumIntro portrait={publicObject(portrait)} works={stream} />
       <MuseumArtists chapters={chapters} />
     </main>

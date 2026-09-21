@@ -45,7 +45,7 @@ export default async function ArtworkPage({ params }) {
   const locationLink = safeLink(object.locationLink);
   const gallery = object.gallery.filter((url) => url !== object.image);
   return (
-    <main id="main">
+    <main id="main" tabIndex={-1}>
       <ArtworkOpening object={object} />
       <ArtworkDetails
         object={object}

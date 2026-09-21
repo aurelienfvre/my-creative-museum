@@ -5,6 +5,7 @@ export default function PageSkeleton({ variant = "page" }) {
   return (
     <main
       id="main"
+      tabIndex={-1}
       className="route-loading min-h-svh py-12 lg:py-16"
       aria-busy="true"
     >

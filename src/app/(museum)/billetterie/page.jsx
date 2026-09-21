@@ -8,7 +8,11 @@ export const metadata = pageMetadata({
 });
 export default function TicketsPage() {
   return (
-    <main id="main" className="page-gutter ticket-page px-5 pb-20 lg:px-14">
+    <main
+      id="main"
+      tabIndex={-1}
+      className="page-gutter ticket-page px-5 pb-20 lg:px-14"
+    >
       <section
         className="tickets-cover mt-8 mb-12 block bg-transparent text-foreground lg:mt-16 lg:mb-20"
         data-arrive

@@ -5,6 +5,7 @@ import useFavorite from "./use-favorite";
 
 export default function FavoriteButton({
   slug,
+  title,
   initialSaved,
   onChange,
   compact = false,
@@ -14,6 +15,13 @@ export default function FavoriteButton({
     initialSaved,
     onChange,
   );
+  const label = loading
+    ? "Un instant…"
+    : saved
+      ? compact
+        ? "Retirer"
+        : "Dans mes favoris"
+      : "Garder cette œuvre";
   const style = `inline-flex min-h-12 items-center justify-center gap-3 border border-foreground px-5 py-3 text-sm transition-colors duration-300 hover:bg-foreground hover:text-background focus-visible:outline-2 focus-visible:outline-offset-4 disabled:cursor-wait ${saved ? "bg-foreground text-white! [&_span]:text-white!" : "bg-transparent text-foreground"}`;
   if (!loading && !session)
     return (
@@ -28,11 +36,7 @@ export default function FavoriteButton({
         onClick={toggle}
         disabled={loading || pending}
         aria-pressed={saved}
-        aria-label={
-          saved
-            ? "Retirer cette œuvre des favoris"
-            : "Ajouter cette œuvre aux favoris"
-        }
+        aria-label={`${label}${title ? ` : ${title}` : ""}${saved ? " — retirer des favoris" : ""}`}
         aria-busy={pending}
         className={style}
       >
@@ -51,15 +55,7 @@ export default function FavoriteButton({
         <span
           className={`relative block ${saved ? "text-white!" : "text-inherit"}`}
         >
-          <FlipText>
-            {loading
-              ? "Un instant…"
-              : saved
-                ? compact
-                  ? "Retirer"
-                  : "Dans mes favoris"
-                : "Garder cette œuvre"}
-          </FlipText>
+          <FlipText>{label}</FlipText>
         </span>
       </button>
       {error && (

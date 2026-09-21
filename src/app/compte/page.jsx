@@ -24,7 +24,11 @@ export default async function AccountPage() {
     .filter(Boolean)
     .map(publicObject);
   return (
-    <main id="main" className="page-gutter min-h-svh pt-10 lg:pt-16">
+    <main
+      id="main"
+      tabIndex={-1}
+      className="page-gutter min-h-svh pt-10 lg:pt-16"
+    >
       <div className="mb-5" data-arrive>
         <BackButton href="/" />
       </div>

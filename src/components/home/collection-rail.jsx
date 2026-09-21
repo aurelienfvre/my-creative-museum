@@ -45,6 +45,7 @@ export default function CollectionRail({ works }) {
             key={work.slug}
             href={`/oeuvres/${work.slug}`}
             data-cursor="artwork"
+            aria-label={`${work.title} — ${work.artist}`}
           >
             <ArtworkImage
               className="h-[22rem] lg:h-[24rem] group-[.has-webgl-carousel]/carousel:hidden"

@@ -55,6 +55,7 @@ export default function MuseumArtists({ chapters }) {
                 >
                   <TransitionLink
                     href={`/oeuvres/${work.slug}`}
+                    aria-label={`${work.title} — ${work.artist}, ${work.year}`}
                     className="block text-ink! no-underline!"
                   >
                     <ArtworkImage

@@ -60,6 +60,11 @@ export default function SearchDialog({
           input={input}
           onClose={onClose}
         />
+        {Array.from(query.trim()).length < 3 && (
+          <p id="search-help" className="mt-3 text-sm text-muted">
+            Saisissez au moins 3 caractères.
+          </p>
+        )}
         <SearchResults
           query={query}
           results={results}

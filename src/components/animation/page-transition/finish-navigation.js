@@ -24,4 +24,5 @@ export function finishNavigation(refs) {
   }
   document.documentElement.style.overflow = refs.previousOverflow.current;
   useMuseumStore.getState().setIsTransitionActive(false);
+  refs.contentRef.current.querySelector("main")?.focus({ preventScroll: true });
 }

@@ -76,12 +76,14 @@ export default function FlipText({ children, className = "" }) {
             className="flip-glyph relative inline-block [perspective:250px] [--flip-progress:0]"
             key={`${index}-${letter}`}
           >
-            <span className="flip-front block backface-hidden transform-3d origin-center [transform:translateY(calc(var(--flip-progress)*-110%))_rotateX(calc(var(--flip-progress)*70deg))]">
-              {letter === " " ? "\u00a0" : letter}
-            </span>
-            <span className="flip-back block absolute inset-0 backface-hidden transform-3d origin-center [transform:translateY(calc((1-var(--flip-progress))*110%))_rotateX(calc((var(--flip-progress)-1)*70deg))]">
-              {letter === " " ? "\u00a0" : letter}
-            </span>
+            <span
+              data-letter={letter === " " ? "\u00a0" : letter}
+              className="flip-front block before:content-[attr(data-letter)] backface-hidden transform-3d origin-center [transform:translateY(calc(var(--flip-progress)*-110%))_rotateX(calc(var(--flip-progress)*70deg))]"
+            />
+            <span
+              data-letter={letter === " " ? "\u00a0" : letter}
+              className="flip-back block absolute inset-0 before:content-[attr(data-letter)] backface-hidden transform-3d origin-center [transform:translateY(calc((1-var(--flip-progress))*110%))_rotateX(calc((var(--flip-progress)-1)*70deg))]"
+            />
           </span>
         ))}
       </span>

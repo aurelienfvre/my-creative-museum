@@ -29,7 +29,10 @@ export default function MenuBody({ pathname, select }) {
             onClick={(event) => select(event, link.href)}
             aria-current={pathname === link.href ? "page" : undefined}
           >
-            <span className="menu-number self-center font-mono text-[0.6rem] opacity-60 lg:text-[0.65rem]">
+            <span
+              aria-hidden="true"
+              className="menu-number self-center font-mono text-[0.6rem] opacity-60 lg:text-[0.65rem]"
+            >
               0{index + 1}
             </span>
             <span className="menu-link-mask -my-[0.08em] block overflow-hidden py-[0.08em]">

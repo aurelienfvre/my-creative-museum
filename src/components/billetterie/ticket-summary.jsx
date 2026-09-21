@@ -7,6 +7,7 @@ export default function TicketSummary({ summary, onReset }) {
     <aside
       className="ticket-summary min-w-0 overflow-x-hidden top-[7.5rem] border border-[rgb(36_59_186_/_0.22)] bg-[#faf9f4] px-8 pt-8 pb-6 text-foreground shadow-[0_12px_30px_-24px_rgb(36_59_186_/_0.22)] lg:sticky lg:max-h-[calc(100svh-9rem)] lg:overflow-y-auto"
       aria-label="Récapitulatif de votre visite"
+      tabIndex={-1}
     >
       <div className="ticket-summary-brand mb-10 flex items-center gap-[.65rem] [&_svg]:size-[2.8rem]">
         <MuseumLogo size={45} />
@@ -60,7 +61,12 @@ export default function TicketSummary({ summary, onReset }) {
         <button
           className="ticket-reset mt-4 border-b text-[.65rem] text-inherit opacity-70"
           type="button"
-          onClick={onReset}
+          onClick={(event) => {
+            event.currentTarget
+              .closest("aside")
+              ?.focus({ preventScroll: true });
+            onReset();
+          }}
         >
           <FlipText>Recommencer ma sélection</FlipText>
         </button>

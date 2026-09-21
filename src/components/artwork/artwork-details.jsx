@@ -42,6 +42,7 @@ function ArtworkDescription({ object, gallery }) {
               >
                 Consulter la ressource complémentaire {index + 1}{" "}
                 <Icon name="arrowUpRight" />
+                <span className="sr-only"> (nouvel onglet)</span>
               </a>
             ),
           )}
@@ -91,6 +92,7 @@ function ArtworkFacts({ object, locationLink }) {
               rel="noreferrer"
             >
               {object.location} <Icon name="arrowUpRight" />
+              <span className="sr-only"> (nouvel onglet)</span>
             </a>
           ) : (
             object.location

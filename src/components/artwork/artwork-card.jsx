@@ -5,6 +5,7 @@ export default function ArtworkCard({ object, index = 0 }) {
   return (
     <TransitionLink
       href={`/oeuvres/${object.slug}`}
+      aria-label={`${object.title} — ${object.artist}, ${object.year}`}
       className="artwork-card"
       data-cursor="artwork"
       data-transition

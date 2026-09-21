@@ -57,14 +57,16 @@ export default function RevealText({
   );
   return (
     <Tag ref={scope} className={`reveal-text ${className}`}>
-      <span className="sr-only">{text}</span>
-      <span aria-hidden="true">
-        {text.split(" ").map((word, index) => (
+      <span>
+        {text.split(" ").map((word, index, words) => (
           <span
-            className="reveal-word inline-block overflow-hidden pt-[.1em] pb-[.22em] pl-0 pr-0 -mb-[.22em] mr-[.22em] last:mr-0 [perspective:600px] align-top [&>span]:inline-block"
+            className="reveal-word inline-block overflow-hidden pt-[.1em] pb-[.22em] pl-0 pr-0 -mb-[.22em] [perspective:600px] align-top [&>span]:inline-block"
             key={`${index}-${word}`}
           >
-            <span>{word}</span>
+            <span className="whitespace-pre">
+              {word}
+              {index < words.length - 1 ? " " : ""}
+            </span>
           </span>
         ))}
       </span>

@@ -6,6 +6,7 @@ export default function NotFound() {
   return (
     <main
       id="main"
+      tabIndex={-1}
       className="not-found-page page-gutter min-h-[91svh] pt-16 pb-20 text-ink max-[600px]:pt-8"
     >
       <div className="flex items-baseline gap-8 max-lg:flex-col max-lg:items-start max-lg:gap-[.8rem]">

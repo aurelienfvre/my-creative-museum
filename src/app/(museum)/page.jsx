@@ -24,7 +24,7 @@ export default async function Home() {
     ["water-lilies", "Prendre le temps de ne rien faire."],
   ].map(([slug, line]) => ({ ...publicObject(pick(slug)), line }));
   return (
-    <main id="main">
+    <main id="main" tabIndex={-1}>
       <HomeMotion>
         <section className="home-cover page-gutter relative grid grid-cols-1 gap-8 pt-8 pb-12 lg:grid-cols-[0.95fr_1.1fr] lg:pt-12 lg:pb-20">
           <div className="home-cover-title z-1 pt-0 lg:pt-[1.3rem]">

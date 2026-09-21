@@ -3,6 +3,7 @@ export default function Loading() {
   return (
     <main
       id="main"
+      tabIndex={-1}
       aria-busy="true"
       className="route-loading page-gutter min-h-svh py-12 lg:py-16"
     >

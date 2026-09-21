@@ -43,6 +43,8 @@ export default function MuseumIntro({ portrait, works }) {
         />
         <canvas
           role="img"
+          tabIndex={-1}
+          aria-hidden="true"
           aria-label={portrait.title}
           className="pointer-events-none absolute inset-0 z-10 size-full opacity-0 group-data-[webgl=ready]:opacity-100"
         />
