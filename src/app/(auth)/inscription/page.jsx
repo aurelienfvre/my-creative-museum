@@ -11,7 +11,7 @@ export default async function Page() {
   if (session) redirect("/");
   return (
     <>
-      <h1 className="mb-10 text-[2.8rem] leading-none tracking-[-.055em] text-foreground lg:text-[3.6rem]">
+      <h1 className="mb-7 text-[2.8rem] leading-none tracking-[-.055em] text-foreground lg:mb-10 lg:text-[3.6rem]">
         Bienvenue.
       </h1>
       <AuthForm mode="signup" />

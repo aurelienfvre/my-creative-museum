@@ -62,6 +62,8 @@ const fragmentShader = `
 `;
 
 export function createInkPassage(canvas, image, onUnavailable) {
+  const mobile = matchMedia("(max-width: 1023px), (pointer: coarse)").matches;
+  const pixelRatio = () => Math.min(window.devicePixelRatio, mobile ? 1 : 1.5);
   let renderer;
   try {
     renderer = new THREE.WebGLRenderer({
@@ -73,9 +75,21 @@ export function createInkPassage(canvas, image, onUnavailable) {
   } catch {
     return null;
   }
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+  renderer.setPixelRatio(pixelRatio());
   renderer.outputColorSpace = THREE.SRGBColorSpace;
-  const texture = new THREE.Texture(image);
+  let source = image;
+  if (mobile && Math.max(image.naturalWidth, image.naturalHeight) > 640) {
+    source = document.createElement("canvas");
+    const scale = 640 / Math.max(image.naturalWidth, image.naturalHeight);
+    source.width = Math.round(image.naturalWidth * scale);
+    source.height = Math.round(image.naturalHeight * scale);
+    source.getContext("2d").drawImage(image, 0, 0, source.width, source.height);
+  }
+  const texture = new THREE.Texture(source);
+  if (mobile) {
+    texture.generateMipmaps = false;
+    texture.minFilter = THREE.LinearFilter;
+  }
   texture.colorSpace = THREE.SRGBColorSpace;
   texture.needsUpdate = true;
   const uniforms = {
@@ -85,9 +99,7 @@ export function createInkPassage(canvas, image, onUnavailable) {
     uTouch: { value: 0 },
     uLightWidth: { value: passageMotion.light.width },
     uLightIntensity: { value: passageMotion.light.intensity },
-    uTexel: {
-      value: new THREE.Vector2(1 / image.naturalWidth, 1 / image.naturalHeight),
-    },
+    uTexel: { value: new THREE.Vector2(1 / source.width, 1 / source.height) },
     uContain: { value: new THREE.Vector2(1, 1) },
     uPaper: { value: new THREE.Color(passageContent.paper) },
     uInk: { value: new THREE.Color(passageContent.ink) },
@@ -104,12 +116,14 @@ export function createInkPassage(canvas, image, onUnavailable) {
   });
   scene.add(new THREE.Mesh(geometry, material));
   let lost = false,
-    disposed = false;
+    disposed = false,
+    visible = true;
   let animation = 0,
     last = 0,
     targetLight = 0.5,
     targetTouch = 0;
-  let shaderFailed = false;
+  let previousFrame,
+    shaderFailed = false;
   renderer.debug.onShaderError = () => {
     shaderFailed = true;
   };
@@ -122,20 +136,28 @@ export function createInkPassage(canvas, image, onUnavailable) {
       targetTouch = 0;
       uniforms.uTouch.value = 0;
       canvas.style.opacity = "0";
+      previousFrame = undefined;
       return;
     }
+    if (!visible || document.hidden) return;
+    const state = [progress, uniforms.uLight.value, uniforms.uTouch.value];
+    if (state.every((value, index) => value === previousFrame?.[index])) return;
     renderer.render(scene, camera);
+    previousFrame = state;
     canvas.style.opacity = shaderFailed ? "0" : "1";
   };
   const resize = () => {
-    const width = canvas.clientWidth,
+    const width = Math.max(1, canvas.clientWidth),
       height = Math.max(1, canvas.clientHeight);
+    const ratio = pixelRatio();
+    if (renderer.getPixelRatio() !== ratio) renderer.setPixelRatio(ratio);
     const imageAspect = image.naturalWidth / image.naturalHeight;
     uniforms.uContain.value.set(
       Math.max(1, width / height / imageAspect),
       Math.max(1, imageAspect / (width / height)),
     );
     renderer.setSize(width, height, false);
+    previousFrame = undefined;
     render();
   };
   const contextLost = () => {
@@ -144,9 +166,15 @@ export function createInkPassage(canvas, image, onUnavailable) {
     onUnavailable();
   };
   const frame = canvas.parentElement;
+  const canAnimate = () =>
+    !disposed &&
+    !lost &&
+    visible &&
+    !document.hidden &&
+    uniforms.uProgress.value < 1;
   const tick = (now) => {
     animation = 0;
-    if (disposed || uniforms.uProgress.value >= 1) return;
+    if (!canAnimate()) return;
     const dt = Math.min((now - last) / 1000, 0.05);
     last = now;
     for (const [key, target] of [
@@ -161,17 +189,13 @@ export function createInkPassage(canvas, image, onUnavailable) {
       );
     }
     render();
-    if (
-      !disposed &&
+    const distance =
       Math.abs(uniforms.uLight.value - targetLight) +
-        Math.abs(uniforms.uTouch.value - targetTouch) >
-        0.001
-    ) {
-      animation = requestAnimationFrame(tick);
-    }
+      Math.abs(uniforms.uTouch.value - targetTouch);
+    if (!disposed && distance > 0.001) animation = requestAnimationFrame(tick);
   };
   const move = (event) => {
-    if (event.pointerType !== "mouse" || uniforms.uProgress.value >= 1) return;
+    if (event.pointerType !== "mouse" || !canAnimate()) return;
     const rect = frame.getBoundingClientRect();
     targetLight = (event.clientX - rect.left) / rect.width + 0.08;
     targetTouch = 1;
@@ -179,7 +203,7 @@ export function createInkPassage(canvas, image, onUnavailable) {
   };
   const leave = () => {
     targetTouch = 0;
-    if (uniforms.uProgress.value >= 1) return;
+    if (!canAnimate()) return;
     if (!animation) animation = requestAnimationFrame(tick);
   };
   frame.addEventListener("pointermove", move);
@@ -187,18 +211,33 @@ export function createInkPassage(canvas, image, onUnavailable) {
   canvas.addEventListener("webglcontextlost", contextLost);
   const observer = new ResizeObserver(resize);
   observer.observe(canvas);
+  const refreshVisibility = () => {
+    if (canAnimate()) {
+      render();
+      animation ||= requestAnimationFrame(tick);
+    } else {
+      cancelAnimationFrame(animation);
+      animation = 0;
+    }
+  };
+  const visibility = new IntersectionObserver(([entry]) => {
+    visible = entry.isIntersecting;
+    refreshVisibility();
+  });
+  visibility.observe(canvas);
+  document.addEventListener("visibilitychange", refreshVisibility);
   const dispose = () => {
     disposed = true;
     cancelAnimationFrame(animation);
     frame.removeEventListener("pointermove", move);
     frame.removeEventListener("pointerleave", leave);
     observer.disconnect();
+    visibility.disconnect();
+    document.removeEventListener("visibilitychange", refreshVisibility);
     canvas.removeEventListener("webglcontextlost", contextLost);
     canvas.style.opacity = "0";
-    geometry.dispose();
-    material.dispose();
-    texture.dispose();
-    renderer.dispose();
+    for (const resource of [geometry, material, texture, renderer])
+      resource.dispose();
   };
   try {
     resize();

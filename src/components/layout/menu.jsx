@@ -13,12 +13,12 @@ export default function Menu() {
       <button
         ref={opener}
         type="button"
-        className="menu-toggle group/menu inline-flex items-center gap-[0.9rem] whitespace-nowrap border-0 bg-transparent py-[0.7rem] pl-[0.6rem] text-[0.75rem] font-medium uppercase tracking-[0.06em] lg:gap-[0.85rem] lg:text-[0.82rem] [&>.icon]:h-[1.2rem] [&>.icon]:w-[1.5rem] [&>.icon]:stroke-[1.2] lg:[&>.icon]:h-[1.3rem] lg:[&>.icon]:w-[1.65rem]"
+        className="menu-toggle group/menu inline-flex min-h-11 min-w-11 items-center justify-center gap-2.5 whitespace-nowrap border-0 bg-transparent py-[0.7rem] min-[360px]:pl-[0.6rem] text-[0.75rem] font-medium uppercase tracking-[0.06em] lg:gap-[0.85rem] lg:text-[0.82rem] [&>.icon]:h-[1.2rem] [&>.icon]:w-[1.5rem] [&>.icon]:stroke-[1.2] lg:[&>.icon]:h-[1.3rem] lg:[&>.icon]:w-[1.65rem]"
         aria-expanded={opened}
         aria-controls="museum-menu"
         onClick={open}
       >
-        <FlipText>Menu</FlipText>
+        <FlipText className="max-[359px]:sr-only">Menu</FlipText>
         <Icon name="menu" />
       </button>
       <dialog
@@ -31,7 +31,7 @@ export default function Menu() {
           close();
         }}
       >
-        <div className="menu-top flex items-center justify-between border-b border-background/25 py-[1.2rem] lg:py-6">
+        <div className="menu-top flex min-h-20 shrink-0 items-center justify-between border-b border-background/25 py-3 lg:py-6">
           <span className="brand flex items-center gap-[0.7rem] [&>svg]:size-[2.7rem] lg:[&>svg]:size-[3.3rem] text-inherit">
             <MuseumLogo />
             <span className="brand-name text-[0.72rem] font-semibold leading-[1.08] tracking-[-0.04em] lg:text-[0.9rem]">
@@ -42,7 +42,7 @@ export default function Menu() {
           </span>
           <button
             type="button"
-            className="menu-toggle group/menu menu-close inline-flex items-center gap-[0.9rem] whitespace-nowrap border-0 bg-transparent py-[0.7rem] pl-[0.6rem] text-[0.75rem] font-medium uppercase tracking-[0.06em] lg:gap-[0.85rem] lg:text-[0.82rem] [&>.icon]:h-[1.2rem] [&>.icon]:w-[1.5rem] [&>.icon]:stroke-[1.2] lg:[&>.icon]:h-[1.3rem] lg:[&>.icon]:w-[1.65rem]"
+            className="menu-toggle group/menu menu-close inline-flex min-h-11 items-center gap-[0.9rem] whitespace-nowrap border-0 bg-transparent py-[0.7rem] pl-[0.6rem] text-[0.75rem] font-medium uppercase tracking-[0.06em] lg:gap-[0.85rem] lg:text-[0.82rem] [&>.icon]:h-[1.2rem] [&>.icon]:w-[1.5rem] [&>.icon]:stroke-[1.2] lg:[&>.icon]:h-[1.3rem] lg:[&>.icon]:w-[1.65rem]"
             onClick={() => close()}
           >
             <FlipText>Fermer</FlipText>

@@ -23,12 +23,12 @@ export default function Header({ objects }) {
       : [];
   return (
     <header
-      className="site-header fixed inset-x-0 top-0 z-50 mx-0 flex h-20 items-center justify-between border-b border-line bg-background px-5 transition-transform duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] data-[header-hidden=true]:-translate-y-[110%] motion-reduce:transition-none lg:h-25 lg:px-14"
+      className="site-header fixed inset-x-0 top-0 z-50 mx-0 flex h-20 items-center justify-between border-b border-line bg-background px-4 transition-transform duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] data-[header-hidden=true]:-translate-y-[110%] motion-reduce:transition-none sm:px-5 lg:h-25 lg:px-14"
       ref={scope}
     >
       <TransitionLink
         href="/"
-        className="brand flex items-center gap-[0.7rem] [&>svg]:size-[2.7rem] lg:[&>svg]:size-[3.3rem] text-foreground"
+        className="brand flex min-h-11 shrink-0 items-center gap-[0.7rem] [&>svg]:size-[2.7rem] lg:[&>svg]:size-[3.3rem] text-foreground"
         aria-label="My Creative Museum — accueil"
       >
         <MuseumLogo />
@@ -38,10 +38,10 @@ export default function Header({ objects }) {
           museum
         </span>
       </TransitionLink>
-      <div className="header-actions flex items-center gap-2 lg:gap-8">
+      <div className="header-actions flex shrink-0 items-center gap-0 sm:gap-2 lg:gap-8">
         <button
           type="button"
-          className="search-button grid size-8 place-items-center [&>svg]:w-[1.2rem]"
+          className="search-button grid size-11 place-items-center lg:size-8 [&>svg]:w-[1.2rem]"
           onClick={openSearch}
           aria-label="Rechercher une œuvre"
         >

@@ -8,16 +8,16 @@ export default function DinoGame() {
   const { controls, status, score, best } = useDinoGame(canvas, area);
   return (
     <section
-      className="dino-game mx-auto mt-10 w-full max-w-[60rem]"
+      className="dino-game mx-auto mt-8 w-full max-w-[60rem] lg:mt-10"
       ref={area}
       aria-label="Jeu du dinosaure"
     >
-      <div className="flex justify-end gap-8 font-mono text-[.7rem]">
+      <div className="flex flex-wrap justify-between gap-x-4 gap-y-2 font-mono text-[12px] sm:justify-end sm:gap-x-8 lg:text-[.7rem]">
         <span>Score {String(score).padStart(4, "0")}</span>
         <span>Record {String(best).padStart(4, "0")}</span>
       </div>
       <button
-        className="dino-field block w-full touch-manipulation border-0 bg-transparent p-0 max-[600px]:overflow-hidden max-[600px]:py-8"
+        className="dino-field block min-h-11 w-full touch-manipulation overflow-hidden border-0 bg-transparent p-0 max-[600px]:py-5"
         type="button"
         aria-label="Sauter avec le dinosaure"
         onClick={() => controls.current.play?.()}
@@ -35,19 +35,26 @@ export default function DinoGame() {
           height={250}
         />
       </button>
-      <div className="flex items-baseline justify-between gap-4 max-[600px]:items-start">
+      <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-4 lg:items-baseline">
         <p
-          className="text-[.75rem] text-muted max-[600px]:max-w-[13rem]"
+          className="min-w-0 text-[14px] leading-relaxed text-muted lg:text-[.75rem]"
           aria-live="polite"
         >
-          {status === "over"
-            ? "Raté. Encore une petite course ?"
-            : status === "paused"
-              ? "La course est en pause."
-              : "Espace, flèche haut ou un tap pour sauter."}
+          {status === "over" ? (
+            "Raté. Encore une petite course ?"
+          ) : status === "paused" ? (
+            "La course est en pause."
+          ) : (
+            <>
+              <span className="sm:hidden">Touchez la piste pour sauter.</span>
+              <span className="hidden sm:inline">
+                Espace, flèche haut ou un tap pour sauter.
+              </span>
+            </>
+          )}
         </p>
         <button
-          className="min-h-11 bg-ink px-[1.4rem] py-[.7rem] text-[.8rem] text-background"
+          className="min-h-11 whitespace-nowrap bg-ink px-4 py-[.7rem] text-[14px] text-background lg:px-[1.4rem] lg:text-[.8rem]"
           type="button"
           onClick={() => {
             if (status === "playing") controls.current.pause?.();

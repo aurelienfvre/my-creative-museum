@@ -8,12 +8,12 @@ import { searchText } from "@/lib/search";
 export default function SearchResults({ query, results, onNavigate }) {
   return (
     <div
-      className="search-results my-[1.8rem] text-[0.85rem]"
+      className="search-results my-[1.8rem] text-[14px] lg:text-[0.85rem]"
       aria-live="polite"
     >
       {Array.from(query.trim()).length >= 3 && (
         <>
-          <p className="eyebrow font-mono text-[0.65rem] uppercase tracking-[0.08em] lg:text-[0.7rem]">
+          <p className="eyebrow font-mono text-[12px] uppercase tracking-[0.08em] lg:text-[0.7rem]">
             {results.length} résultat{results.length > 1 ? "s" : ""}
           </p>
           {results.slice(0, 6).map((object) => (
@@ -24,9 +24,9 @@ export default function SearchResults({ query, results, onNavigate }) {
               onClick={onNavigate}
             >
               <SearchThumbnail src={object.image} />
-              <span className="min-w-0 break-words">
+              <span className="min-w-0 wrap-anywhere">
                 <SearchHighlight text={object.title} query={query} />
-                <small className="mt-[0.2rem] block text-[0.7rem] text-muted">
+                <small className="mt-[0.2rem] block text-[14px] text-muted lg:text-[0.7rem]">
                   <SearchHighlight text={object.artist} query={query} />
                 </small>
               </span>
@@ -48,7 +48,7 @@ function SearchThumbnail({ src }) {
   const [failed, setFailed] = useState(false);
   return (
     <span
-      className="relative flex size-16 shrink-0 items-center justify-center overflow-hidden bg-foreground/5 lg:size-18"
+      className="relative flex size-12 shrink-0 items-center justify-center overflow-hidden bg-foreground/5 sm:size-16 lg:size-18"
       aria-hidden="true"
     >
       {src && !failed ? (

@@ -2,9 +2,14 @@ import { gsap } from "@/lib/gsap";
 
 export function createGalleryCaptionSync(timeline, slides, captions, counters) {
   let lastActive = -1;
+  const states = captions.map((caption, index) => ({
+    elements: [caption, counters[index]],
+    opacity: -1,
+    offset: Number.NaN,
+  }));
   const syncActive = () => {
     const time = timeline.time();
-    captions.forEach((caption, index) => {
+    states.forEach((previous, index) => {
       const enter =
         index === 0
           ? 1
@@ -13,11 +18,15 @@ export function createGalleryCaptionSync(timeline, slides, captions, counters) {
         index === captions.length - 1
           ? 0
           : gsap.utils.clamp(0, 1, (time - (index * 1.35 + 0.75)) / 0.22);
-      for (const element of [caption, counters[index]]) {
-        element.style.transform = `translateY(${110 * (1 - enter - leave)}%)`;
-        element.style.opacity = String(enter * (1 - leave));
-        element.style.visibility =
-          enter * (1 - leave) > 0 ? "visible" : "hidden";
+      const opacity = enter * (1 - leave);
+      const offset = 110 * (1 - enter - leave);
+      if (opacity === previous.opacity && offset === previous.offset) return;
+      previous.opacity = opacity;
+      previous.offset = offset;
+      for (const element of previous.elements) {
+        element.style.transform = `translateY(${offset}%)`;
+        element.style.opacity = String(opacity);
+        element.style.visibility = opacity > 0 ? "visible" : "hidden";
       }
     });
     const active = Math.min(

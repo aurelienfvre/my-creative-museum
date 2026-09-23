@@ -8,21 +8,21 @@ export default function CollectionToolbar({
   change,
 }) {
   return (
-    <div className="collection-toolbar max-lg:[&_input]:text-[max(16px,.8rem)] max-lg:[&_select]:text-[max(16px,.8rem)] grid grid-cols-2 gap-4 border-y border-line py-6 lg:grid-cols-[1.6fr_1fr_1fr_.9fr]">
-      <label className="field-label flex flex-col gap-[.55rem] text-[.7rem] text-muted first:col-span-full lg:text-[.65rem] lg:first:col-span-1">
+    <div className="collection-toolbar grid grid-cols-2 gap-x-4 gap-y-5 border-y border-line py-5 lg:grid-cols-[1.6fr_1fr_1fr_.9fr] lg:gap-4 lg:py-6">
+      <label className="field-label col-span-full flex min-w-0 flex-col gap-1 text-xs text-muted lg:col-span-1 lg:gap-[.55rem] lg:text-[.65rem]">
         Rechercher
         <input
-          className="w-full min-w-0 rounded-none border-b border-line bg-transparent px-0 py-[.6rem] text-[max(.8rem,16px)] text-ink lg:px-2 lg:py-[.7rem] lg:text-[.8rem]"
+          className="min-h-11 w-full min-w-0 rounded-none border-b border-line bg-transparent px-0 py-2 text-base text-ink lg:min-h-0 lg:px-2 lg:py-[.7rem] lg:text-[.8rem]"
           type="search"
           placeholder="Titre, artiste, mouvement…"
           value={query}
           onChange={(event) => change("q", event.target.value)}
         />
       </label>
-      <label className="field-label flex flex-col gap-[.55rem] text-[.7rem] text-muted first:col-span-full lg:text-[.65rem] lg:first:col-span-1">
+      <label className="field-label flex min-w-0 flex-col gap-1 text-xs text-muted lg:gap-[.55rem] lg:text-[.65rem]">
         Mouvement
         <select
-          className="w-full min-w-0 rounded-none border-b border-line bg-transparent px-0 py-[.6rem] text-[max(.8rem,16px)] text-ink lg:px-2 lg:py-[.7rem] lg:text-[.8rem]"
+          className="min-h-11 w-full min-w-0 truncate rounded-none border-b border-line bg-transparent px-0 py-2 text-base text-ink lg:min-h-0 lg:px-2 lg:py-[.7rem] lg:text-[.8rem]"
           value={movement}
           onChange={(event) => change("mouvement", event.target.value)}
         >
@@ -32,10 +32,10 @@ export default function CollectionToolbar({
           ))}
         </select>
       </label>
-      <label className="field-label flex flex-col gap-[.55rem] text-[.7rem] text-muted first:col-span-full lg:text-[.65rem] lg:first:col-span-1">
+      <label className="field-label flex min-w-0 flex-col gap-1 text-xs text-muted lg:gap-[.55rem] lg:text-[.65rem]">
         Artiste
         <select
-          className="w-full min-w-0 rounded-none border-b border-line bg-transparent px-0 py-[.6rem] text-[max(.8rem,16px)] text-ink lg:px-2 lg:py-[.7rem] lg:text-[.8rem]"
+          className="min-h-11 w-full min-w-0 truncate rounded-none border-b border-line bg-transparent px-0 py-2 text-base text-ink lg:min-h-0 lg:px-2 lg:py-[.7rem] lg:text-[.8rem]"
           value={artist}
           onChange={(event) => change("artiste", event.target.value)}
         >
@@ -45,10 +45,10 @@ export default function CollectionToolbar({
           ))}
         </select>
       </label>
-      <label className="field-label flex flex-col gap-[.55rem] text-[.7rem] text-muted first:col-span-full lg:text-[.65rem] lg:first:col-span-1">
+      <label className="field-label col-span-full flex min-w-0 flex-col gap-1 text-xs text-muted sm:col-span-1 lg:gap-[.55rem] lg:text-[.65rem]">
         Trier par
         <select
-          className="w-full min-w-0 rounded-none border-b border-line bg-transparent px-0 py-[.6rem] text-[max(.8rem,16px)] text-ink lg:px-2 lg:py-[.7rem] lg:text-[.8rem]"
+          className="min-h-11 w-full min-w-0 truncate rounded-none border-b border-line bg-transparent px-0 py-2 text-base text-ink lg:min-h-0 lg:px-2 lg:py-[.7rem] lg:text-[.8rem]"
           value={sort}
           onChange={(event) => change("tri", event.target.value)}
         >

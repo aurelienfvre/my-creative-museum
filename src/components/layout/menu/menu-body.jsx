@@ -11,7 +11,7 @@ const links = [
 
 export default function MenuBody({ pathname, select }) {
   return (
-    <div className="menu-body grid flex-1 grid-cols-1 items-center gap-8 py-8 lg:grid-cols-[1fr_1.7fr] lg:gap-12 lg:py-12">
+    <div className="menu-body grid flex-1 grid-cols-1 items-center gap-8 py-8 max-lg:landscape:gap-4 max-lg:landscape:py-3 lg:grid-cols-[1fr_1.7fr] lg:gap-12 lg:py-12">
       <div className="menu-aside hidden lg:block [&>svg]:my-8 [&>svg]:size-32 [&>svg]:rotate-[-10deg]">
         <MuseumLogo size={190} />
         <p className="text-[1.3rem]">
@@ -23,7 +23,7 @@ export default function MenuBody({ pathname, select }) {
       <nav className="flex flex-col" aria-label="Navigation principale">
         {links.map((link, index) => (
           <Link
-            className="flex items-center gap-[0.8rem] border-b border-background/20 py-4 aria-[current=page]:text-accent lg:gap-6 lg:py-[0.65rem] [&>.icon]:ml-auto [&>.icon]:size-[1.3rem] lg:[&>.icon]:size-[1.8rem]"
+            className="flex min-h-11 items-center gap-[0.8rem] border-b border-background/20 py-4 aria-[current=page]:text-accent max-lg:landscape:py-2 lg:gap-6 lg:py-[0.65rem] [&>.icon]:ml-auto [&>.icon]:size-[1.3rem] lg:[&>.icon]:size-[1.8rem]"
             key={link.href}
             href={link.href}
             onClick={(event) => select(event, link.href)}
@@ -36,7 +36,7 @@ export default function MenuBody({ pathname, select }) {
               0{index + 1}
             </span>
             <span className="menu-link-mask -my-[0.08em] block overflow-hidden py-[0.08em]">
-              <span className="menu-link-word block text-[2.7rem] font-normal leading-[1.1] tracking-[-0.055em] lg:text-[4.5rem]">
+              <span className="menu-link-word block text-[clamp(2rem,10.5vw,4.5rem)] font-normal leading-[1.1] tracking-[-0.055em] max-lg:landscape:text-[clamp(2rem,8svh,3rem)] lg:text-[4.5rem]">
                 <FlipText>{link.label}</FlipText>
               </span>
             </span>

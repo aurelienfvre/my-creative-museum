@@ -5,7 +5,8 @@ export const museumMotion = {
   rebuildDelay: 0.15,
   // Keep these queries aligned with the Tailwind variants in globals.css.
   media: {
-    intro: "(prefers-reduced-motion: no-preference)",
+    intro:
+      "(prefers-reduced-motion: no-preference) and ((min-width: 1024px) or ((min-height: 540px) and (orientation: portrait)))",
     chapters:
       "(prefers-reduced-motion: no-preference) and (min-height: 540px) and ((min-width: 1024px) or (orientation: portrait))",
   },
@@ -35,6 +36,7 @@ export const introMotion = {
 } as const;
 
 export const artistMotion = {
+  mobile: { artistScale: 0.38, reflectionHold: 0.32 },
   scroll: { withReflection: 140, withoutReflection: 70 },
   chapterInterval: 2.45,
   enter: { duration: 0.48, ease: "power2.out" },

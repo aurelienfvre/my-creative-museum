@@ -3,7 +3,6 @@ import { useRef, useState } from "react";
 import TransitionLink from "@/components/animation/transition-link";
 import ArtworkImage from "@/components/artwork/artwork-image";
 import { gsap, useGSAP } from "@/lib/gsap";
-import { startCarousel } from "./carousel-runtime";
 
 export default function CollectionRail({ works }) {
   const scope = useRef(null);
@@ -38,7 +37,7 @@ export default function CollectionRail({ works }) {
           </TransitionLink>
         </div>
       )}
-      <div className="museum-carousel-fallback group-[.has-webgl-carousel]/carousel:absolute group-[.has-webgl-carousel]/carousel:size-px group-[.has-webgl-carousel]/carousel:overflow-hidden group-[.has-webgl-carousel]/carousel:[clip-path:inset(50%)] group-[.has-webgl-carousel]/carousel:p-0 group-[.has-webgl-carousel]/carousel:focus-within:[clip-path:none] group-[.has-webgl-carousel]/carousel:focus-within:w-[min(25rem,90%)] group-[.has-webgl-carousel]/carousel:focus-within:h-auto group-[.has-webgl-carousel]/carousel:focus-within:bottom-4 group-[.has-webgl-carousel]/carousel:focus-within:left-4 group-[.has-webgl-carousel]/carousel:focus-within:z-3 group-[.has-webgl-carousel]/carousel:focus-within:bg-background group-[.has-webgl-carousel]/carousel:focus-within:p-4 flex gap-5 overflow-x-auto px-5 py-12 lg:gap-8 lg:px-14">
+      <div className="museum-carousel-fallback group-[.has-webgl-carousel]/carousel:absolute group-[.has-webgl-carousel]/carousel:size-px group-[.has-webgl-carousel]/carousel:overflow-hidden group-[.has-webgl-carousel]/carousel:[clip-path:inset(50%)] group-[.has-webgl-carousel]/carousel:p-0 group-[.has-webgl-carousel]/carousel:focus-within:[clip-path:none] group-[.has-webgl-carousel]/carousel:focus-within:w-[min(25rem,90%)] group-[.has-webgl-carousel]/carousel:focus-within:h-auto group-[.has-webgl-carousel]/carousel:focus-within:bottom-4 group-[.has-webgl-carousel]/carousel:focus-within:left-4 group-[.has-webgl-carousel]/carousel:focus-within:z-3 group-[.has-webgl-carousel]/carousel:focus-within:bg-background group-[.has-webgl-carousel]/carousel:focus-within:p-4 flex gap-5 overflow-x-auto px-5 py-8 lg:gap-8 lg:px-14 lg:py-12">
         {works.map((work, index) => (
           <TransitionLink
             className="museum-carousel-card group-[.has-webgl-carousel]/carousel:basis-80 min-w-0 grow-0 shrink-0 basis-[75vw] lg:basis-[23rem]"
@@ -48,12 +47,12 @@ export default function CollectionRail({ works }) {
             aria-label={`${work.title} — ${work.artist}`}
           >
             <ArtworkImage
-              className="h-[22rem] lg:h-[24rem] group-[.has-webgl-carousel]/carousel:hidden"
+              className="h-[clamp(18rem,58vw,26rem)] lg:h-[24rem] group-[.has-webgl-carousel]/carousel:hidden"
               src={work.image}
               title={work.title}
-              sizes="(max-width: 1023px) 65vw, 30vw"
+              sizes="(max-width: 1023px) 75vw, 30vw"
             />
-            <span className="mt-4 flex gap-4 text-[.85rem]">
+            <span className="mt-3 flex gap-3 text-[14px] lg:mt-4 lg:gap-4 lg:text-[.85rem]">
               <small className="text-muted">
                 {String(index + 1).padStart(2, "0")}
               </small>
@@ -72,9 +71,19 @@ function useCollectionCarousel(scope, works, setActiveIndex) {
       const media = gsap.matchMedia();
       media.add(
         "(min-width: 1024px) and (prefers-reduced-motion: no-preference)",
-        () => {
+        (_context, contextSafe) => {
           if (works.length < 2) return;
-          return startCarousel(scope.current, works, setActiveIndex);
+          let disposed = false,
+            stop;
+          const attach = contextSafe(({ startCarousel }) => {
+            if (!disposed)
+              stop = startCarousel(scope.current, works, setActiveIndex);
+          });
+          import("./carousel-runtime").then(attach).catch(() => {});
+          return () => {
+            disposed = true;
+            stop?.();
+          };
         },
       );
       return () => media.revert();

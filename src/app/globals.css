@@ -1,4 +1,9 @@
 @import "tailwindcss";
+@custom-variant museum-intro (@media (
+    prefers-reduced-motion: no-preference
+  ) and (
+    (min-width: 1024px) or ((min-height: 540px) and (orientation: portrait))
+  ));
 @custom-variant museum-motion (@media (
     prefers-reduced-motion: no-preference
   ) and (min-height: 540px) and (
@@ -27,7 +32,7 @@
 }
 @layer base {
   html {
-    @apply text-[calc(100vw/390*16)] lg:text-[calc(100vw/1440*16)] scroll-pt-24 [-webkit-text-size-adjust:100%];
+    @apply text-[100%] lg:text-[calc(100vw/1440*16)] scroll-pt-24 [-webkit-text-size-adjust:100%] has-[dialog[open]]:overflow-hidden;
   }
   body {
     @apply m-0 min-w-[320px] bg-background text-ink font-sans leading-normal antialiased;

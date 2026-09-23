@@ -27,7 +27,7 @@ export default function SearchForm({ query, setQuery, input, onClose }) {
           Titre, artiste ou mouvement
         </label>
         <input
-          className="w-full min-w-0 border-0 bg-transparent text-[max(16px,0.8rem)] outline-0 lg:text-[1rem]"
+          className="min-h-11 w-full min-w-0 border-0 bg-transparent text-[max(16px,0.8rem)] outline-0 lg:min-h-0 lg:text-[1rem]"
           ref={input}
           id="global-search"
           name="q"

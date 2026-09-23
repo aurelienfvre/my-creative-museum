@@ -30,13 +30,13 @@ export default function ProfileIntro({ user, children }) {
   );
   return (
     <section ref={scope} aria-label="Mon profil" className="py-5 lg:py-8">
-      <header className="flex max-w-3xl items-start gap-6 lg:items-center lg:gap-10">
+      <header className="flex max-w-3xl items-start gap-4 sm:gap-6 lg:items-center lg:gap-10">
         <div
           data-profile-detail
           aria-hidden="true"
-          className="flex size-20 shrink-0 items-center justify-center overflow-hidden bg-foreground text-white lg:size-32"
+          className="flex size-14 shrink-0 items-center justify-center overflow-hidden bg-foreground text-white sm:size-20 lg:size-32"
         >
-          <span className="font-editorial text-[3.5rem] leading-none lg:text-[5.5rem]">
+          <span className="font-editorial text-[2.5rem] leading-none sm:text-[3.5rem] lg:text-[5.5rem]">
             {user.name.trim().slice(0, 1).toLocaleUpperCase("fr")}
           </span>
         </div>
@@ -49,7 +49,7 @@ export default function ProfileIntro({ user, children }) {
           </div>
           <div
             data-profile-detail
-            className="mt-5 flex flex-wrap items-center gap-x-7 gap-y-1"
+            className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-1 lg:mt-5 lg:gap-x-7"
           >
             <button
               type="button"
@@ -71,7 +71,7 @@ export default function ProfileIntro({ user, children }) {
         className={`grid transition-[grid-template-rows,opacity] duration-500 ease-in-out motion-reduce:transition-none ${editing ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}
       >
         <div className="overflow-hidden">
-          <div className="mt-8 max-w-2xl bg-foreground/[.035] px-6 py-3 lg:ml-42 lg:px-8">
+          <div className="mt-6 max-w-2xl bg-foreground/[.035] px-4 py-2 sm:px-6 lg:mt-8 lg:ml-42 lg:px-8 lg:py-3">
             {children}
           </div>
         </div>

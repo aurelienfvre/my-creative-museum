@@ -11,23 +11,25 @@ export default function TicketOptions({
   children,
 }) {
   return (
-    <section className="ticket-section mb-8 border-t border-line pt-[1.7rem]">
-      <h2 className="mb-4 text-[1.6rem]">{title}</h2>
-      <p className="mb-6 text-[.8rem] text-muted">{description}</p>
+    <section className="ticket-section mb-8 border-t border-line pt-5 lg:pt-[1.7rem]">
+      <h2 className="mb-3 text-[1.5rem] lg:mb-4 lg:text-[1.6rem]">{title}</h2>
+      <p className="mb-4 max-w-xl text-sm leading-relaxed text-muted lg:mb-6 lg:text-[.8rem]">
+        {description}
+      </p>
       {types.map((type) => (
         <div
-          className="ticket-row grid grid-cols-[1fr_auto_auto] items-center gap-[.7rem] border-b border-line py-[1.2rem] lg:gap-6"
+          className="ticket-row grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-2 border-b border-line py-4 sm:grid-cols-[minmax(0,1fr)_auto_auto] lg:gap-6 lg:py-[1.2rem]"
           key={type.id}
         >
-          <div>
-            <h3 className="text-[.85rem] font-normal lg:text-[.95rem]">
+          <div className="col-span-2 min-w-0 sm:col-span-1">
+            <h3 className="text-base font-normal lg:text-[.95rem]">
               {type.label}
             </h3>
-            <small className="mt-[.15rem] block text-[.65rem] text-muted lg:text-[.7rem]">
+            <small className="mt-1 block text-xs leading-relaxed text-muted lg:mt-[.15rem] lg:text-[.7rem]">
               {type.detail}
             </small>
           </div>
-          <span className="ticket-price text-[.85rem] text-foreground lg:text-[.95rem]">
+          <span className="ticket-price whitespace-nowrap text-sm text-foreground lg:text-[.95rem]">
             {freeLabel && !type.price ? "Gratuit" : currency(type.price)}
           </span>
           <QuantityStepper

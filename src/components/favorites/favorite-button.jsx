@@ -25,8 +25,18 @@ export default function FavoriteButton({
   const style = `inline-flex min-h-12 items-center justify-center gap-3 border border-foreground px-5 py-3 text-sm transition-colors duration-300 hover:bg-foreground hover:text-background focus-visible:outline-2 focus-visible:outline-offset-4 disabled:cursor-wait ${saved ? "bg-foreground text-white! [&_span]:text-white!" : "bg-transparent text-foreground"}`;
   if (!loading && !session)
     return (
-      <TransitionLink href="/connexion" prefetch={false} className={style}>
-        <FlipText>Se connecter pour garder cette œuvre</FlipText>
+      <TransitionLink
+        href="/connexion"
+        prefetch={false}
+        className={style}
+        aria-label="Se connecter pour garder cette œuvre"
+      >
+        <span className="lg:hidden" aria-hidden="true">
+          Se connecter pour garder
+        </span>
+        <span className="hidden lg:inline">
+          <FlipText>Se connecter pour garder cette œuvre</FlipText>
+        </span>
       </TransitionLink>
     );
   return (

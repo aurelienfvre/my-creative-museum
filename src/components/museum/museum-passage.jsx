@@ -28,7 +28,7 @@ export default function MuseumPassage({ work }) {
     <section
       ref={scope}
       aria-labelledby="museum-passage-title"
-      className="relative museum-motion:h-[var(--passage-scroll)] museum-motion:lg:h-[var(--passage-scroll-desktop)]"
+      className="relative museum-motion:h-[var(--passage-mobile-height,var(--passage-scroll))] museum-motion:lg:h-[var(--passage-scroll-desktop)]"
       style={{
         "--passage-scroll": `${passageMotion.scroll.mobile}svh`,
         "--passage-scroll-desktop": `${passageMotion.scroll.desktop}svh`,
@@ -36,7 +36,7 @@ export default function MuseumPassage({ work }) {
     >
       <div
         data-passage-stage
-        className="relative mx-auto grid max-w-[2000px] content-center items-center gap-7 px-[5vw] py-20 lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] lg:gap-[clamp(20px,2.5vw,48px)] lg:px-[3vw] museum-motion:sticky museum-motion:top-0 museum-motion:h-svh museum-motion:overflow-clip museum-motion:pt-[92px] museum-motion:pb-6 museum-motion:max-lg:grid-rows-[minmax(72px,1fr)_auto_minmax(0,1fr)] museum-motion:max-lg:content-stretch museum-motion:max-lg:gap-y-5 museum-motion:lg:pt-[104px]"
+        className="relative mx-auto grid max-w-[2000px] content-center items-center gap-7 px-5 py-12 lg:py-20 lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] lg:gap-[clamp(20px,2.5vw,48px)] lg:px-[3vw] museum-motion:sticky museum-motion:top-20 museum-motion:lg:top-0 museum-motion:lg:h-svh museum-motion:overflow-clip museum-motion:pt-5 museum-motion:pb-8 museum-motion:lg:pb-6 museum-motion:max-lg:grid-rows-[auto_auto] museum-motion:max-lg:content-start museum-motion:max-lg:gap-y-5 museum-motion:lg:pt-[104px]"
       >
         <h2
           id="museum-passage-title"
@@ -87,7 +87,7 @@ export default function MuseumPassage({ work }) {
                     src={work.image}
                     alt={work.title}
                     objectFit="contain"
-                    loading="eager"
+                    loading="lazy"
                     sizes={sizes}
                     onError={() => setFailedSrc(work.image)}
                   />

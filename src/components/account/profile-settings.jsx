@@ -82,15 +82,15 @@ export default function ProfileSettings({ user }) {
 function ProfileForm({ kind, children, disabled = false }) {
   const { submit, pending, feedback } = useProfileForm(kind);
   return (
-    <form onSubmit={submit} aria-busy={pending} className="pb-8">
+    <form onSubmit={submit} aria-busy={pending} className="pb-6 lg:pb-8">
       <fieldset
         disabled={pending || disabled}
-        className="space-y-6 disabled:opacity-60"
+        className="min-w-0 space-y-5 disabled:opacity-60 lg:space-y-6"
       >
         {children}
         <button
           type="submit"
-          className="min-h-12 bg-foreground px-6 py-3 text-background transition-opacity hover:opacity-85 focus-visible:outline-2 focus-visible:outline-offset-4 disabled:cursor-not-allowed"
+          className="min-h-12 w-full bg-foreground px-6 py-3 text-background transition-opacity hover:opacity-85 focus-visible:outline-2 focus-visible:outline-offset-4 disabled:cursor-not-allowed sm:w-auto"
         >
           {pending ? "Enregistrement…" : "Enregistrer"}
         </button>

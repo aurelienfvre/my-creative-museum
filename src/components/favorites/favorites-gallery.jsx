@@ -20,8 +20,14 @@ export default function FavoritesGallery({ objects }) {
     );
   }
   return (
-    <section className="mt-14 pb-20 lg:mt-20" aria-labelledby="favorites-title">
-      <div className="mb-10 flex flex-wrap items-baseline gap-4" data-reveal>
+    <section
+      className="mt-10 pb-14 lg:mt-20 lg:pb-20"
+      aria-labelledby="favorites-title"
+    >
+      <div
+        className="mb-7 flex flex-wrap items-baseline gap-x-4 gap-y-2 lg:mb-10"
+        data-reveal
+      >
         <h2
           id="favorites-title"
           tabIndex={-1}
@@ -39,7 +45,7 @@ export default function FavoritesGallery({ objects }) {
         </p>
       )}
       {visible.length ? (
-        <div className="grid grid-cols-1 gap-x-10 gap-y-12 md:grid-cols-2 lg:grid-cols-3 [&_.card-image-wrap_.artwork-image]:aspect-square">
+        <div className="grid grid-cols-1 gap-x-6 gap-y-10 md:grid-cols-2 lg:grid-cols-3 lg:gap-x-10 lg:gap-y-12 [&_.card-image-wrap_.artwork-image]:aspect-square">
           {visible.map((object, index) => (
             <FavoriteCard
               key={object.slug}
@@ -55,7 +61,7 @@ export default function FavoritesGallery({ objects }) {
           ))}
         </div>
       ) : (
-        <div className="py-10 lg:py-16" data-reveal>
+        <div className="py-6 lg:py-16" data-reveal>
           <p className="mb-6 max-w-xl text-xl text-muted">
             Les œuvres que vous gardez se retrouvent ici.
           </p>

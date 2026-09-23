@@ -9,7 +9,7 @@ export default function AccountLink() {
       href={data ? "/compte" : "/connexion"}
       prefetch={false}
       aria-label="Mon compte"
-      className="grid size-8 place-items-center [&>svg]:w-[1.2rem]"
+      className="grid size-11 place-items-center lg:size-8 [&>svg]:w-[1.2rem]"
     >
       <Icon name="user" />
     </TransitionLink>

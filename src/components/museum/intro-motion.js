@@ -1,5 +1,5 @@
 import { Flip } from "gsap/Flip";
-import { gsap } from "@/lib/gsap";
+import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { streamPlanes } from "./data";
 import { introMotion, museumMotion } from "./motion.config";
 import { softenStickyEdges } from "./sticky-motion";
@@ -12,29 +12,61 @@ export function animateMuseumIntro(root, contextSafe, motion) {
   const image = root.querySelector("[data-portrait] .artwork-image");
   const full = root.querySelector("[data-full-frame]");
   const landing = root.querySelector("[data-landing-frame]");
+  const ending = root.querySelector("[data-story-ending]");
+  const detail = root.querySelector("[data-story-detail]");
   const copy = root.querySelectorAll("h1, [data-intro-copy]");
   const { settle, expand } = introMotion;
   let timeline;
+  const refresh = gsap.delayedCall(0.05, () => ScrollTrigger.refresh()).pause();
   const build = contextSafe(() => {
     const position = timeline?.scrollTrigger?.progress;
     timeline?.scrollTrigger?.kill();
     timeline?.revert();
     gsap.set(landing, { clearProps: "top,width,height" });
+    gsap.set([ending, detail], { clearProps: "top" });
+    gsap.set(ending, { clearProps: "width" });
     if (root.clientWidth < 1024) {
       const headerHeight =
         document.querySelector(".site-header")?.offsetHeight || 80;
-      const top = Math.max(full.clientHeight * 0.07, headerHeight + 16);
-      const endingTop = root.querySelector("[data-story-ending]").offsetTop;
-      const height = Math.min(
-        full.clientHeight * 0.43,
-        root.clientWidth * 0.8,
-        Math.max(80, endingTop - top - 24),
+      const top = headerHeight + 16;
+      const width = root.clientWidth - 40;
+      gsap.set(ending, { width });
+      let height = Math.min(
+        width / 0.8,
+        Math.max(80, full.clientHeight - top - ending.offsetHeight - 48),
       );
+      for (let pass = 0; pass < 3; pass++) {
+        gsap.set(ending, { width: height * 0.8 });
+        height = Math.min(
+          width / 0.8,
+          Math.max(80, full.clientHeight - top - ending.offsetHeight - 48),
+        );
+      }
       gsap.set(landing, { top, height, width: height * 0.8 });
+      gsap.set(ending, { top: top + height + 24, width: height * 0.8 });
+      const tail = `${-Math.max(0, full.clientHeight - top - height - ending.offsetHeight - 64)}px`;
+      if (root.style.getPropertyValue("--intro-tail") !== tail) {
+        root.style.setProperty("--intro-tail", tail);
+        refresh.restart(true);
+      }
+      const portrait = root.querySelector("[data-portrait]");
+      gsap.set(detail, {
+        top: portrait.offsetTop + portrait.offsetHeight + 24,
+      });
     }
+    gsap.set(image, {
+      transformOrigin: root.clientWidth < 1024 ? "0 0" : "50% 50%",
+    });
     const initial = Flip.getState(image);
-    const expanded = Flip.fit(image, full, { getVars: true });
-    const settled = Flip.fit(image, landing, { getVars: true });
+    const fit = { getVars: true, scale: root.clientWidth < 1024 };
+    const expanded = Flip.fit(image, full, fit);
+    const settled = Flip.fit(image, landing, fit);
+    if (fit.scale) {
+      const scale = Math.max(expanded.scaleX, expanded.scaleY);
+      expanded.x -= ((scale - expanded.scaleX) * image.offsetWidth) / 2;
+      expanded.y -= ((scale - expanded.scaleY) * image.offsetHeight) / 2;
+      expanded.scaleX = expanded.scaleY = scale;
+    }
     const copyExitY = -Math.max(
       ...[...copy].map(
         (element) => element.offsetTop + element.offsetHeight + 64,
@@ -77,7 +109,7 @@ export function animateMuseumIntro(root, contextSafe, motion) {
       .set(copy, { autoAlpha: 0 }, introMotion.copyExit)
       .fromTo(
         image,
-        Flip.fit(image, initial, { getVars: true }),
+        Flip.fit(image, initial, fit),
         { ...expanded, duration: expand.duration, ease: museumMotion.ease },
         expand.at,
       )
@@ -137,6 +169,8 @@ export function animateMuseumIntro(root, contextSafe, motion) {
   };
   window.addEventListener("resize", onResize);
   return () => {
+    root.style.removeProperty("--intro-tail");
+    refresh.kill();
     releaseEdges();
     window.removeEventListener("resize", onResize);
     resize.kill();
@@ -151,16 +185,29 @@ export function animateMuseumIntro(root, contextSafe, motion) {
 }
 
 export function loadMuseumImage(root, src, motion) {
-  if (!matchMedia(museumMotion.media.intro).matches) return;
-  let cancelled = false,
+  const media = matchMedia(
+    "(min-width: 1024px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)",
+  );
+  let generation = 0,
     dispose;
-  import("./image-runtime")
-    .then(({ startMuseumImage }) => {
-      if (!cancelled) dispose = startMuseumImage(root, src, motion);
-    })
-    .catch(() => {});
+  const sync = () => {
+    const current = ++generation;
+    dispose?.();
+    dispose = undefined;
+    delete root.dataset.webgl;
+    if (!media.matches) return;
+    import("./image-runtime")
+      .then(({ startMuseumImage }) => {
+        if (current === generation)
+          dispose = startMuseumImage(root, src, motion);
+      })
+      .catch(() => {});
+  };
+  sync();
+  media.addEventListener("change", sync);
   return () => {
-    cancelled = true;
+    generation++;
+    media.removeEventListener("change", sync);
     dispose?.();
     delete root.dataset.webgl;
   };

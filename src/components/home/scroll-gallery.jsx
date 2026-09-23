@@ -33,7 +33,7 @@ export default function ScrollGallery({ works }) {
             </span>
           ))}
         </div>
-        <div className="scroll-frames group-[.is-pinned-gallery]/gallery:relative group-[.is-pinned-gallery]/gallery:h-[50svh] lg:group-[.is-pinned-gallery]/gallery:h-[min(59vh,35rem)]">
+        <div className="scroll-frames group-[.is-pinned-gallery]/gallery:relative group-[.is-pinned-gallery]/gallery:h-[min(42svh,70vw)] lg:group-[.is-pinned-gallery]/gallery:h-[min(59vh,35rem)]">
           {works.map((work) => (
             <TransitionLink
               key={work.slug}
@@ -49,7 +49,7 @@ export default function ScrollGallery({ works }) {
                 title={work.title}
                 sizes="(max-width: 1023px) 90vw, 62vw"
               />
-              <span className="scroll-static-caption group-[.is-pinned-gallery]/gallery:hidden mt-[.8rem] block text-[.8rem]">
+              <span className="scroll-static-caption group-[.is-pinned-gallery]/gallery:hidden mt-[.8rem] block text-[14px] lg:text-[.8rem]">
                 {work.artist} — {work.title}
               </span>
             </TransitionLink>
@@ -62,13 +62,13 @@ export default function ScrollGallery({ works }) {
           / {String(works.length).padStart(2, "0")}
         </span>
       </div>
-      <div className="scroll-captions group-[.is-pinned-gallery]/gallery:grid group-[.is-pinned-gallery]/gallery:text-center group-[.is-pinned-gallery]/gallery:h-20 group-[.is-pinned-gallery]/gallery:overflow-hidden hidden">
+      <div className="scroll-captions group-[.is-pinned-gallery]/gallery:grid group-[.is-pinned-gallery]/gallery:text-center group-[.is-pinned-gallery]/gallery:h-26 lg:group-[.is-pinned-gallery]/gallery:h-20 group-[.is-pinned-gallery]/gallery:overflow-hidden hidden">
         {works.map((work) => (
           <div className="scroll-caption [grid-area:1/1]" key={work.slug}>
-            <p className="font-editorial text-[1.7rem] text-ink lg:text-[2rem]">
+            <p className="font-editorial text-[clamp(1.5rem,6.2vw,2rem)] leading-[1.15] text-ink lg:text-[2rem] lg:leading-normal">
               {work.line}
             </p>
-            <span className="mt-2 block text-[.65rem] text-muted lg:text-[.68rem]">
+            <span className="mt-2 block text-[14px] text-muted lg:text-[.68rem]">
               {work.artist} · {work.year}
             </span>
           </div>
@@ -82,8 +82,9 @@ function useScrollGallery(scope, works) {
   useGSAP(
     () => {
       const media = gsap.matchMedia();
-      media.add("(prefers-reduced-motion: no-preference)", () =>
-        startScrollGallery(scope.current),
+      media.add(
+        "(prefers-reduced-motion: no-preference) and ((min-width: 1024px) or (min-height: 540px))",
+        () => startScrollGallery(scope.current),
       );
       return () => media.revert();
     },

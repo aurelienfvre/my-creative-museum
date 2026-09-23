@@ -11,7 +11,8 @@ export function animateArtistChapters(root, contextSafe) {
     timeline?.scrollTrigger?.kill();
     timeline?.revert();
     const height = stage.clientHeight;
-    const gap = Math.max(24, height * 0.035);
+    const mobile = root.clientWidth < 640;
+    const gap = mobile ? 24 : Math.max(24, height * 0.035);
     timeline = gsap.timeline({
       defaults: { ease: museumMotion.ease },
       scrollTrigger: {
@@ -29,6 +30,7 @@ export function animateArtistChapters(root, contextSafe) {
       const figures = [...pictures.querySelectorAll("figure")];
       const message = chapter.querySelector("[data-chapter-message]");
       const start = index * artistMotion.chapterInterval;
+      gsap.set(pictures, { clearProps: "top" });
       const titleScale = Math.min(
         1,
         (root.clientWidth * 0.92) / title.scrollWidth,
@@ -37,6 +39,20 @@ export function animateArtistChapters(root, contextSafe) {
         1,
         (root.clientWidth * 0.92) / painter.scrollWidth,
       );
+      if (mobile) {
+        const header =
+          document.querySelector(".site-header")?.offsetHeight || 80;
+        const contentHeight =
+          title.offsetHeight +
+          pictures.offsetHeight +
+          painter.offsetHeight * artistScale +
+          gap * 2;
+        const top = Math.max(
+          header + 16,
+          (height + header - contentHeight) / 2,
+        );
+        gsap.set(pictures, { top: top + title.offsetHeight + gap });
+      }
       const artistTop = pictures.offsetTop + pictures.offsetHeight + gap;
       gsap.set(painter, { top: artistTop, transformOrigin: "center top" });
       gsap.set(title, {
@@ -68,7 +84,16 @@ export function animateArtistChapters(root, contextSafe) {
         )
         .fromTo(
           painter,
-          { scale: artistScale * 0.38, y: 30 },
+          {
+            scale:
+              artistScale *
+              (mobile
+                ? artistMotion.mobile.artistScale
+                : root.clientWidth < 1024
+                  ? 0.64
+                  : 0.38),
+            y: 30,
+          },
           {
             scale: artistScale,
             y: 0,
@@ -134,6 +159,9 @@ export function animateArtistChapters(root, contextSafe) {
           },
           start + artistMotion.message.enterAt,
         );
+        if (last && mobile) {
+          timeline.to({}, { duration: artistMotion.mobile.reflectionHold });
+        }
         if (!last) {
           timeline.to(
             message,
@@ -167,9 +195,11 @@ export function animateArtistChapters(root, contextSafe) {
   const refresh = gsap.delayedCall(museumMotion.rebuildDelay, build).pause();
   const observer = new ResizeObserver(() => refresh.restart(true));
   observer.observe(stage);
-  root.querySelectorAll("[data-chapter-pictures]").forEach((pictures) => {
-    observer.observe(pictures);
-  });
+  root
+    .querySelectorAll("[data-chapter-pictures], [data-chapter-title], h2")
+    .forEach((element) => {
+      observer.observe(element);
+    });
   let disposed = false;
   document.fonts.ready.then(() => {
     if (!disposed) refresh.restart(true);

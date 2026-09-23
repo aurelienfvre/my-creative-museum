@@ -28,7 +28,7 @@ export default async function Home() {
       <HomeMotion>
         <section className="home-cover page-gutter relative grid grid-cols-1 gap-8 pt-8 pb-12 lg:grid-cols-[0.95fr_1.1fr] lg:pt-12 lg:pb-20">
           <div className="home-cover-title z-1 pt-0 lg:pt-[1.3rem]">
-            <h1 className="flex flex-col text-[5.3rem] leading-[1] tracking-[-0.075em] font-normal text-foreground lg:text-[8.6rem]">
+            <h1 className="flex flex-col text-[clamp(4.25rem,20vw,7.5rem)] leading-[1] tracking-[-0.075em] font-normal text-foreground lg:text-[8.6rem]">
               <span className="line-mask block overflow-hidden pt-[.16em] px-[.08em] pb-[.23em] -mt-[.16em] -mx-[.08em] -mb-[.23em] [&>span]:block motion-safe:[perspective:800px]">
                 <span data-hero-line>L’art.</span>
               </span>
@@ -52,30 +52,30 @@ export default async function Home() {
               aria-label={`Découvrir ${hero.title}`}
             >
               <ArtworkImage
-                className="h-[23rem] lg:h-[33rem]"
+                className="h-[clamp(14rem,65vw,28rem)] lg:h-[33rem]"
                 src={hero.image}
                 title={hero.title}
                 preload
                 sizes="(max-width: 1023px) 90vw, 53vw"
               />
             </TransitionLink>
-            <figcaption className="mt-[.8rem] flex justify-between text-[.65rem] text-muted">
+            <figcaption className="mt-[.8rem] flex justify-between gap-4 text-[12px] text-muted lg:text-[.65rem]">
               <span>{hero.artist}</span>
               <span>{hero.year}</span>
             </figcaption>
           </figure>
         </section>
       </HomeMotion>
-      <section className="home-manifesto [.home-motion:not([data-hero-ready=true])+&]:invisible page-gutter grid grid-cols-1 gap-8 py-12 text-ink lg:grid-cols-[1fr_3fr] lg:gap-16 lg:py-24">
+      <section className="home-manifesto [.home-motion:not([data-hero-ready=true])+&]:invisible page-gutter grid grid-cols-1 gap-6 py-10 text-ink sm:gap-8 sm:py-12 lg:grid-cols-[1fr_3fr] lg:gap-16 lg:py-24">
         <MuseumLogo size={90} className="size-14 rotate-[-8deg] lg:size-24" />
         <div>
           <RevealText
-            className="text-[2.5rem] leading-[1.1] tracking-[-.055em] lg:text-[3.8rem]"
+            className="text-[clamp(2rem,6.5vw,3.25rem)] leading-[1.1] tracking-[-.055em] lg:text-[3.8rem]"
             followSelector=".manifesto-bottom"
             text="On n’a pas besoin de tout connaître pour ressentir quelque chose."
           />
           <div className="manifesto-bottom mt-6 flex flex-col items-start justify-between gap-6 lg:mt-10 lg:flex-row lg:items-end lg:gap-16">
-            <p className="max-w-[22rem] text-[.95rem] leading-[1.7] text-muted">
+            <p className="max-w-[32rem] text-base leading-[1.6] text-muted lg:max-w-[22rem] lg:text-[.95rem] lg:leading-[1.7]">
               Un musée numérique pour les regards curieux. Des œuvres venues du
               monde entier, à découvrir à son rythme.
             </p>

@@ -73,7 +73,17 @@ export default function GSAPWrapper({ children }) {
           });
           setup();
           // Les contenus streamés après loading.js reçoivent aussi leur animation.
-          const observer = new MutationObserver(setup);
+          const observer = new MutationObserver((records) => {
+            const selector = "[data-arrive], [data-reveal]";
+            const addedMotion = records.some(({ addedNodes }) =>
+              Array.from(addedNodes).some(
+                (node) =>
+                  node instanceof Element &&
+                  (node.matches(selector) || node.querySelector(selector)),
+              ),
+            );
+            if (addedMotion) setup();
+          });
           observer.observe(root, { childList: true, subtree: true });
           return () => observer.disconnect();
         },

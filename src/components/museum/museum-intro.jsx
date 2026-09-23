@@ -29,7 +29,7 @@ export default function MuseumIntro({ portrait, works }) {
   return (
     <div
       ref={scope}
-      className="group relative min-h-svh motion-safe:h-[var(--intro-height)] motion-safe:lg:h-[var(--intro-desktop-height)]"
+      className="group relative museum-intro:h-[var(--intro-height)] museum-intro:lg:h-[var(--intro-desktop-height)] museum-intro:max-lg:mb-[var(--intro-tail,0px)]"
       style={{
         "--intro-height": `${introMotion.scroll.mobile}svh`,
         "--intro-desktop-height": `${introMotion.scroll.desktop}svh`,
@@ -37,12 +37,12 @@ export default function MuseumIntro({ portrait, works }) {
     >
       <section
         data-full-frame
-        className="page-gutter relative motion-safe:sticky motion-safe:top-0 motion-safe:h-svh motion-safe:overflow-hidden motion-reduce:min-h-[90svh]"
+        className="page-gutter relative pb-8 museum-intro:sticky museum-intro:top-0 museum-intro:h-svh museum-intro:overflow-hidden museum-intro:pb-0 lg:pb-0 motion-reduce:min-h-[90svh]"
       >
         <div
           data-landing-frame
           aria-hidden="true"
-          className="pointer-events-none invisible absolute left-1/2 -translate-x-1/2 top-[7%] w-[min(64vw,34.4svh)] h-[43svh] lg:translate-x-0 lg:left-[10%] lg:top-[12%] lg:w-[38%] lg:h-[76%]"
+          className="pointer-events-none invisible absolute inset-x-0 mx-auto top-[7%] w-[min(64vw,34.4svh)] h-[43svh] lg:mx-0 lg:right-auto lg:left-[10%] lg:top-[12%] lg:w-[38%] lg:h-[76%]"
         />
         <canvas
           role="img"
@@ -52,14 +52,22 @@ export default function MuseumIntro({ portrait, works }) {
           className="pointer-events-none absolute inset-0 z-10 size-full opacity-0 group-data-[webgl=ready]:opacity-100"
         />
         <MuseumStory works={works} />
-        <h1 className="pt-[4svh] text-[min(15vw,12svh)] lg:text-[clamp(64px,min(14vw,24svh),360px)] leading-[.95] tracking-[-.075em] text-foreground">
+        <h1 className="pt-6 lg:pt-[4svh] text-[min(15vw,12svh)] lg:text-[clamp(64px,min(14vw,24svh),360px)] leading-[.95] tracking-[-.075em] text-foreground">
           {introContent.title}
           <span className="font-editorial">.</span>
         </h1>
+        <p
+          data-intro-copy
+          className="relative mt-5 w-full max-w-[30ch] text-base leading-relaxed lg:absolute lg:mt-0 lg:w-auto lg:max-w-none lg:left-[70%] lg:right-[5%] lg:top-[61%] lg:text-[clamp(16px,min(1.6vw,2.6svh),30px)]"
+        >
+          {introContent.opening}
+          <br />
+          <span className="text-muted">{introContent.description}</span>
+        </p>
         <div className="contents">
           <figure
             data-portrait
-            className="absolute z-10 top-[34%] left-1/2 m-0 -translate-x-1/2 h-[min(34svh,72.5vw)] w-[27.2svh] max-w-[58vw] lg:top-[36%] lg:w-[min(24vw,32svh)] lg:h-[min(30vw,40svh)] lg:max-w-none"
+            className="relative z-10 mx-auto mt-6 aspect-[4/5] w-full max-w-md museum-intro:max-lg:w-[min(calc((100svh_-_20rem)*.8),calc(100vw_-_40px))] lg:absolute lg:m-0 lg:max-w-none lg:left-1/2 lg:-translate-x-1/2 lg:top-[36%] lg:w-[min(24vw,32svh)] lg:h-[min(30vw,40svh)]"
           >
             <ArtworkImage
               src={portrait.image}
@@ -69,14 +77,6 @@ export default function MuseumIntro({ portrait, works }) {
               sizes="100vw"
             />
           </figure>
-          <p
-            data-intro-copy
-            className="absolute left-[12%] right-[12%] top-[18%] text-[16px] leading-relaxed lg:left-[70%] lg:right-[5%] lg:top-[61%] lg:text-[clamp(16px,min(1.6vw,2.6svh),30px)]"
-          >
-            {introContent.opening}
-            <br />
-            <span className="text-muted">{introContent.description}</span>
-          </p>
         </div>
       </section>
     </div>
@@ -135,7 +135,7 @@ function MuseumStory({ works }) {
       ))}
       <p
         data-story-detail
-        className="pointer-events-none invisible absolute inset-x-[10%] top-[73%] text-[26px] lg:inset-x-[28%] lg:top-[82%] lg:text-[clamp(22px,min(2.5vw,3.4svh),44px)] motion-reduce:hidden z-20 text-center leading-tight tracking-tight text-foreground opacity-0"
+        className="pointer-events-none invisible absolute inset-x-[10%] top-[73%] text-[clamp(21px,6vw,26px)] lg:inset-x-[28%] lg:top-[82%] lg:text-[clamp(22px,min(2.5vw,3.4svh),44px)] motion-reduce:hidden z-20 text-center leading-tight tracking-tight text-foreground opacity-0"
       >
         {introContent.detail.opening}
         <br />
@@ -158,7 +158,7 @@ function MuseumStory({ works }) {
       </div>
       <div
         data-story-ending
-        className="pointer-events-none invisible absolute left-[9%] right-[9%] top-[57%] lg:left-[58%] lg:right-[7%] lg:top-[34%] z-20 opacity-0"
+        className="pointer-events-none invisible absolute inset-x-0 mx-auto w-[min(84vw,28rem)] top-[57%] lg:mx-0 lg:w-auto lg:left-[58%] lg:right-[7%] lg:top-[34%] z-20 opacity-0"
       >
         <p className="text-[clamp(26px,7vw,38px)] lg:text-[clamp(28px,min(4vw,6svh),80px)] leading-[1.04] tracking-tight">
           {introContent.ending.opening}

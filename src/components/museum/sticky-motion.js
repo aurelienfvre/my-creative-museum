@@ -1,6 +1,6 @@
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 
-export function softenStickyEdges(root, stage) {
+export function softenStickyEdges(root, stage, top = () => 0) {
   const setY = gsap.quickSetter(stage, "y", "px");
   let start = 0;
   let end = 0;
@@ -19,8 +19,8 @@ export function softenStickyEdges(root, stage) {
     start: "top bottom",
     end: "bottom top",
     onRefresh: (self) => {
-      start = self.start + window.innerHeight;
-      end = self.end - stage.clientHeight;
+      start = self.start + window.innerHeight - top();
+      end = self.end - stage.clientHeight - top();
       radius = Math.max(
         1,
         Math.min(96, stage.clientHeight * 0.12, (end - start) / 4),

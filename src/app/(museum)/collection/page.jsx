@@ -16,13 +16,13 @@ export default async function CollectionPage() {
   const objects = await getObjects();
   return (
     <main id="main" tabIndex={-1}>
-      <section className="collection-cover page-gutter pt-12 pb-10 lg:pt-16 lg:pb-16">
+      <section className="collection-cover page-gutter pt-8 pb-8 lg:pt-16 lg:pb-16">
         <h1
-          className="flex items-start gap-[.4rem] text-[3.8rem] leading-none font-normal tracking-[-.075em] text-foreground lg:gap-4 lg:text-[16rem]"
+          className="flex items-start gap-2 text-[clamp(2.75rem,14vw,5rem)] leading-none font-normal tracking-[-.075em] text-foreground lg:gap-4 lg:text-[16rem]"
           data-arrive
         >
           Collection
-          <span className="collection-total pt-[.3rem] font-editorial text-[1.1rem] tracking-[-.04em] lg:pt-4 lg:text-[2.2rem]">
+          <span className="collection-total shrink-0 pt-[.3rem] font-editorial text-base tracking-[-.04em] lg:pt-4 lg:text-[2.2rem]">
             ({objects.length})
           </span>
         </h1>

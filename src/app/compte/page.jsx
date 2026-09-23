@@ -27,9 +27,9 @@ export default async function AccountPage() {
     <main
       id="main"
       tabIndex={-1}
-      className="page-gutter min-h-svh pt-10 lg:pt-16"
+      className="page-gutter min-h-[calc(100svh-5rem)] pt-6 lg:min-h-svh lg:pt-16"
     >
-      <div className="mb-5" data-arrive>
+      <div className="mb-3 lg:mb-5" data-arrive>
         <BackButton href="/" />
       </div>
       <ProfileIntro

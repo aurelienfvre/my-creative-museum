@@ -9,8 +9,12 @@ export default function AuthForm({ mode }) {
   const signup = mode === "signup";
   const { submit, pending, error } = useAuthForm(mode);
   return (
-    <form onSubmit={submit} className="space-y-6" aria-busy={pending}>
-      <fieldset disabled={pending} className="space-y-6">
+    <form
+      onSubmit={submit}
+      className="space-y-5 lg:space-y-6"
+      aria-busy={pending}
+    >
+      <fieldset disabled={pending} className="min-w-0 space-y-5 lg:space-y-6">
         {signup && (
           <label className="block text-sm text-muted">
             Nom

@@ -30,10 +30,10 @@ export default function Footer() {
       ref={footer}
       className="site-footer [&_:focus-visible]:outline-accent relative z-0 overflow-clip bg-foreground px-5 pt-8 pb-0 text-background [&.footer-reveal]:sticky [&.footer-reveal]:bottom-0 motion-reduce:[&.footer-reveal]:relative lg:px-14 lg:pt-12"
     >
-      <div className="footer-top flex flex-col items-start justify-between gap-8 lg:flex-row">
+      <div className="footer-top flex flex-col items-start justify-between gap-4 lg:flex-row lg:gap-8">
         <p className="font-editorial text-[2rem]">Gardez l’œil ouvert.</p>
         <nav
-          className="footer-links [&>a]:animated-underline [&>a]:pb-[.2em] [&_.icon]:block [&_.icon]:align-baseline flex gap-[1.3rem] text-[0.75rem] lg:gap-8 lg:text-[0.8rem] [&>a]:inline-flex [&>a]:items-center [&>a]:gap-[0.65rem] [&>a]:whitespace-nowrap"
+          className="footer-links [&>a]:animated-underline [&>a]:pb-[.2em] [&_.icon]:block [&_.icon]:align-baseline flex flex-wrap gap-x-5 gap-y-0 text-[14px] lg:gap-8 lg:text-[0.8rem] [&>a]:inline-flex [&>a]:min-h-11 lg:[&>a]:min-h-0 [&>a]:items-center [&>a]:gap-[0.65rem] [&>a]:whitespace-nowrap"
           aria-label="Pied de page"
         >
           <TransitionLink href="/collection">
@@ -47,7 +47,7 @@ export default function Footer() {
           </TransitionLink>
         </nav>
       </div>
-      <div className="footer-print relative -mx-5 mt-10 pt-[1.2rem] lg:-mx-14">
+      <div className="footer-print relative -mx-5 mt-8 pt-[1.2rem] lg:-mx-14 lg:mt-10">
         <svg
           viewBox="0 0 1200 232"
           aria-hidden="true"

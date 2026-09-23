@@ -50,12 +50,12 @@ export default function ProfileDisclosure({ title, value, children }) {
       {/* biome-ignore lint/a11y/noStaticElementInteractions: Native summary provides Enter/Space activation and disclosure semantics. */}
       <summary
         onClick={toggle}
-        className="flex min-h-20 cursor-pointer list-none items-center justify-between gap-5 py-6 focus-visible:outline-2 focus-visible:outline-offset-4 [&::-webkit-details-marker]:hidden"
+        className="flex min-h-18 cursor-pointer list-none items-center justify-between gap-4 py-5 focus-visible:outline-2 focus-visible:outline-offset-4 lg:min-h-20 lg:gap-5 lg:py-6 [&::-webkit-details-marker]:hidden"
       >
         <span className="min-w-0">
           <span className="block text-lg text-ink">{title}</span>
           {value && (
-            <span className="mt-1 block break-words text-sm text-muted">
+            <span className="mt-1 block text-sm text-muted [overflow-wrap:anywhere]">
               {value}
             </span>
           )}

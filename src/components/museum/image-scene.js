@@ -2,13 +2,16 @@ import * as THREE from "three";
 import { fragmentShader, vertexShader } from "./image-shaders";
 
 export function createImageScene(canvas) {
+  const mobile = window.matchMedia("(max-width: 1023px)").matches;
   const renderer = new THREE.WebGLRenderer({
     canvas,
     alpha: true,
     antialias: true,
     preserveDrawingBuffer: true,
   });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+  renderer.setPixelRatio(
+    Math.min(window.devicePixelRatio, mobile ? 1.25 : 1.5),
+  );
   const scene = new THREE.Scene(),
     camera = new THREE.PerspectiveCamera(40, 1, 0.1, 20);
   camera.position.z = 3;
@@ -20,7 +23,12 @@ export function createImageScene(canvas) {
     uPointer: { value: new THREE.Vector2(0.5, 0.5) },
     uCover: { value: new THREE.Vector2(1, 1) },
   };
-  const geometry = new THREE.PlaneGeometry(1, 1, 64, 40);
+  const geometry = new THREE.PlaneGeometry(
+    1,
+    1,
+    mobile ? 40 : 64,
+    mobile ? 28 : 40,
+  );
   const material = new THREE.ShaderMaterial({
     uniforms,
     vertexShader,
@@ -47,8 +55,13 @@ export function createImageScene(canvas) {
       return hit ? 1 : 0;
     },
     resize() {
-      const width = canvas.clientWidth,
+      const width = Math.max(1, canvas.clientWidth),
         height = Math.max(1, canvas.clientHeight);
+      const ratio = Math.min(
+        window.devicePixelRatio,
+        width < 1024 ? 1.25 : 1.5,
+      );
+      if (renderer.getPixelRatio() !== ratio) renderer.setPixelRatio(ratio);
       renderer.setSize(width, height, false);
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
@@ -67,6 +80,12 @@ export function createImageScene(canvas) {
         );
       }
       uniforms.uPointer.value.lerp(pointer, 1 - Math.exp(-dt * 5));
+      return (
+        progress > 0 &&
+        (Math.abs(uniforms.uVelocity.value - velocity) > 0.001 ||
+          Math.abs(uniforms.uTouch.value - touch) > 0.001 ||
+          uniforms.uPointer.value.distanceToSquared(pointer) > 0.000001)
+      );
     },
     render(rect, viewport) {
       const height = 2 * Math.tan(THREE.MathUtils.degToRad(20)) * 3;
