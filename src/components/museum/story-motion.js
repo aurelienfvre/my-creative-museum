@@ -1,3 +1,4 @@
+import { streamPlanes } from "./data";
 import { introMotion, museumMotion } from "./motion.config";
 
 export function animateMuseumStory(timeline, root) {
@@ -6,8 +7,8 @@ export function animateMuseumStory(timeline, root) {
     .fromTo(
       root.querySelectorAll("[data-art-stream]"),
       { autoAlpha: 0 },
-      { autoAlpha: 0.9, duration: stream.enterDuration },
-      0,
+      { autoAlpha: 1, duration: stream.enterDuration },
+      stream.enterAt,
     )
     .fromTo(
       root.querySelectorAll("[data-stream-art]"),
@@ -15,9 +16,31 @@ export function animateMuseumStory(timeline, root) {
       {
         y: (_, element) =>
           -root.querySelector("section").clientHeight *
-          (4.1 + Number(element.dataset.depth) * 0.4),
+          streamPlanes[Number(element.dataset.depth)].scrollTravel,
         duration: stream.moveDuration,
         ease: "none",
+      },
+      0,
+    )
+    .fromTo(
+      root.querySelectorAll("[data-stream-art]"),
+      { x: 0 },
+      {
+        x: (_, element) => {
+          const plane = streamPlanes[Number(element.dataset.depth)];
+          const width = root.clientWidth;
+          const side = Number(element.dataset.side);
+          const mobile = width < 1024;
+          const margin = width * (mobile ? 0.01 : 0.04);
+          const available =
+            side < 0
+              ? element.offsetLeft - margin
+              : width - element.offsetLeft - element.offsetWidth - margin;
+          const travel = width * (mobile ? 0.045 : plane.exitTravel);
+          return side * Math.min(travel, Math.max(0, available));
+        },
+        duration: stream.moveDuration,
+        ease: museumMotion.ease,
       },
       0,
     )

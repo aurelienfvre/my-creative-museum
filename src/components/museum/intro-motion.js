@@ -2,6 +2,7 @@ import { Flip } from "gsap/Flip";
 import { gsap } from "@/lib/gsap";
 import { streamPlanes } from "./data";
 import { introMotion, museumMotion } from "./motion.config";
+import { softenStickyEdges } from "./sticky-motion";
 import { animateMuseumStory } from "./story-motion";
 
 gsap.registerPlugin(Flip);
@@ -15,7 +16,7 @@ export function animateMuseumIntro(root, contextSafe, motion) {
   const { settle, expand } = introMotion;
   let timeline;
   const build = contextSafe(() => {
-    const position = timeline?.scrollTrigger?.progress || 0;
+    const position = timeline?.scrollTrigger?.progress;
     timeline?.scrollTrigger?.kill();
     timeline?.revert();
     gsap.set(landing, { clearProps: "top,width,height" });
@@ -34,6 +35,11 @@ export function animateMuseumIntro(root, contextSafe, motion) {
     const initial = Flip.getState(image);
     const expanded = Flip.fit(image, full, { getVars: true });
     const settled = Flip.fit(image, landing, { getVars: true });
+    const copyExitY = -Math.max(
+      ...[...copy].map(
+        (element) => element.offsetTop + element.offsetHeight + 64,
+      ),
+    );
     timeline = gsap.timeline({
       onUpdate: () => {
         motion.progress = imageEase(
@@ -62,7 +68,7 @@ export function animateMuseumIntro(root, contextSafe, motion) {
       .to(
         copy,
         {
-          y: (_, element) => -(element.offsetTop + element.offsetHeight + 64),
+          y: copyExitY,
           duration: introMotion.copyExit,
           ease: museumMotion.ease,
         },
@@ -83,9 +89,10 @@ export function animateMuseumIntro(root, contextSafe, motion) {
       .addLabel(settle.label);
     animateMuseumStory(timeline, root);
     timeline.to({}, { duration: introMotion.ending.hold });
-    timeline.progress(position);
+    timeline.progress(position ?? timeline.scrollTrigger.progress);
   });
   build();
+  const releaseEdges = softenStickyEdges(root, full);
   const planes = [...root.querySelectorAll("[data-depth-plane]")];
   const moveX = planes.map((plane) =>
     gsap.quickTo(plane, "x", { ...introMotion.pointer }),
@@ -97,8 +104,13 @@ export function animateMuseumIntro(root, contextSafe, motion) {
     if (event.pointerType !== "mouse") return;
     const rect = full.getBoundingClientRect();
     planes.forEach((_, index) => {
-      const distance = streamPlanes[index].pointerTravel;
-      moveX[index]((event.clientX / rect.width - 0.5) * -distance);
+      const distance = Math.min(
+        streamPlanes[index].pointerTravel,
+        rect.width * (rect.width < 1024 ? 0.015 : 0.06),
+      );
+      moveX[index](
+        ((event.clientX - rect.left) / rect.width - 0.5) * -distance,
+      );
       moveY[index](
         ((event.clientY - rect.top) / rect.height - 0.5) * -distance,
       );
@@ -120,10 +132,12 @@ export function animateMuseumIntro(root, contextSafe, motion) {
       return;
     frameWidth = full.clientWidth;
     frameHeight = full.clientHeight;
+    resetPointer();
     resize.restart(true);
   };
   window.addEventListener("resize", onResize);
   return () => {
+    releaseEdges();
     window.removeEventListener("resize", onResize);
     resize.kill();
     full.removeEventListener("pointermove", pointer);

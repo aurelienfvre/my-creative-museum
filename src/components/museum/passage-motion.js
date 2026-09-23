@@ -1,5 +1,6 @@
 import { gsap } from "@/lib/gsap";
 import { museumMotion, passageMotion } from "./motion.config";
+import { softenStickyEdges } from "./sticky-motion";
 
 export function animateMuseumPassage(root, contextSafe) {
   const figure = root.querySelector("[data-passage-figure]");
@@ -83,6 +84,10 @@ export function animateMuseumPassage(root, contextSafe) {
     );
   arrival.progress(arrival.scrollTrigger.progress);
   timeline.progress(timeline.scrollTrigger.progress);
+  const releaseEdges = softenStickyEdges(
+    root,
+    root.querySelector("[data-passage-stage]"),
+  );
 
   const attachInk = contextSafe((createInkPassage, source) => {
     if (disposed) return;
@@ -105,6 +110,7 @@ export function animateMuseumPassage(root, contextSafe) {
   ready();
   return () => {
     disposed = true;
+    releaseEdges();
     image?.removeEventListener("load", ready);
     arrival.scrollTrigger?.kill();
     arrival.revert();

@@ -36,11 +36,11 @@ export default function MuseumPassage({ work }) {
     >
       <div
         data-passage-stage
-        className="relative mx-auto grid max-w-[2000px] content-center items-center gap-7 px-[5vw] py-20 lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] lg:gap-[clamp(20px,2.5vw,48px)] lg:px-[3vw] museum-motion:sticky museum-motion:top-0 museum-motion:h-svh museum-motion:overflow-clip museum-motion:pt-[92px] museum-motion:pb-6 museum-motion:lg:pt-[104px]"
+        className="relative mx-auto grid max-w-[2000px] content-center items-center gap-7 px-[5vw] py-20 lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] lg:gap-[clamp(20px,2.5vw,48px)] lg:px-[3vw] museum-motion:sticky museum-motion:top-0 museum-motion:h-svh museum-motion:overflow-clip museum-motion:pt-[92px] museum-motion:pb-6 museum-motion:max-lg:grid-rows-[minmax(72px,1fr)_auto_minmax(0,1fr)] museum-motion:max-lg:content-stretch museum-motion:max-lg:gap-y-5 museum-motion:lg:pt-[104px]"
       >
         <h2
           id="museum-passage-title"
-          className="flex items-start justify-between gap-6 font-medium leading-[1.02] tracking-[-.045em] lg:contents"
+          className="flex items-start justify-between gap-6 font-medium leading-[1.02] tracking-[-.045em] lg:contents museum-motion:max-lg:row-start-1 museum-motion:max-lg:self-end"
         >
           <span
             data-passage-opening
@@ -65,7 +65,7 @@ export default function MuseumPassage({ work }) {
         </h2>
         <figure
           data-passage-figure
-          className="mx-auto w-full max-w-[720px] origin-center lg:col-start-2 lg:row-start-1 lg:w-[min(56vw,calc(100svh_-_210px),920px)] museum-motion:max-w-[min(90vw,calc(100svh_-_290px))] museum-motion:lg:max-w-[920px]"
+          className="mx-auto w-full max-w-[720px] origin-center lg:col-start-2 lg:row-start-1 lg:w-[min(56vw,calc(100svh_-_210px),920px)] museum-motion:max-w-[min(90vw,calc(100svh_-_290px))] museum-motion:max-lg:row-start-2 museum-motion:lg:max-w-[920px]"
         >
           <TransitionLink
             href={`/oeuvres/${work.slug}`}
@@ -108,7 +108,7 @@ export default function MuseumPassage({ work }) {
             <span className="block text-[16px] font-medium lg:text-[clamp(18px,1.3vw,22px)]">
               {work.title}
             </span>
-            <span className="mt-1 block text-[12px] text-muted lg:text-[14px]">
+            <span className="mt-1 block text-[14px] text-muted">
               {work.artist} · {work.year}
             </span>
           </figcaption>

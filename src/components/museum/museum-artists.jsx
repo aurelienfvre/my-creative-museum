@@ -84,7 +84,7 @@ export default function MuseumArtists({ chapters }) {
                         sizes="(max-width: 1023px) 43vw, 24vw"
                       />
                     </TransitionLink>
-                    <figcaption className="text-[13px] lg:text-[clamp(13px,min(1.2vw,1.9svh),22px)] mt-[12px] w-0 min-w-full leading-[1.35]">
+                    <figcaption className="text-[14px] lg:text-[clamp(14px,min(1.2vw,1.9svh),22px)] mt-3 w-0 min-w-full leading-[1.4] text-pretty">
                       <span>{work.title}</span>
                       <span className="mt-[6px] block text-muted">
                         <span className="hidden lg:inline">
@@ -103,7 +103,7 @@ export default function MuseumArtists({ chapters }) {
             {reflection && (
               <p
                 data-chapter-message
-                className="pointer-events-none mx-auto max-w-[18ch] px-6 py-12 text-center text-[clamp(28px,4.5vw,72px)] font-medium leading-[1.12] tracking-[-.04em] museum-motion:absolute museum-motion:inset-0 museum-motion:m-auto museum-motion:h-fit museum-motion:invisible museum-motion:py-0"
+                className="pointer-events-none mx-auto max-w-[24ch] whitespace-pre-line px-6 py-12 text-center text-[clamp(28px,4.5vw,72px)] font-medium leading-[1.12] tracking-[-.04em] museum-motion:absolute museum-motion:inset-0 museum-motion:m-auto museum-motion:h-fit museum-motion:invisible museum-motion:py-0"
               >
                 {reflection}
               </p>

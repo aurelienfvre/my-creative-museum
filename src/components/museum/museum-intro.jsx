@@ -52,14 +52,14 @@ export default function MuseumIntro({ portrait, works }) {
           className="pointer-events-none absolute inset-0 z-10 size-full opacity-0 group-data-[webgl=ready]:opacity-100"
         />
         <MuseumStory works={works} />
-        <h1 className="pt-[4svh] text-[15vw] lg:text-[clamp(64px,min(14vw,24svh),360px)] leading-[.95] tracking-[-.075em] text-foreground">
+        <h1 className="pt-[4svh] text-[min(15vw,12svh)] lg:text-[clamp(64px,min(14vw,24svh),360px)] leading-[.95] tracking-[-.075em] text-foreground">
           {introContent.title}
           <span className="font-editorial">.</span>
         </h1>
         <div className="contents">
           <figure
             data-portrait
-            className="absolute top-[28%] left-1/2 m-0 -translate-x-1/2 h-[min(34svh,72.5vw)] w-[27.2svh] max-w-[58vw] lg:top-[36%] lg:w-[min(24vw,32svh)] lg:h-[min(30vw,40svh)] lg:max-w-none"
+            className="absolute z-10 top-[34%] left-1/2 m-0 -translate-x-1/2 h-[min(34svh,72.5vw)] w-[27.2svh] max-w-[58vw] lg:top-[36%] lg:w-[min(24vw,32svh)] lg:h-[min(30vw,40svh)] lg:max-w-none"
           >
             <ArtworkImage
               src={portrait.image}
@@ -71,7 +71,7 @@ export default function MuseumIntro({ portrait, works }) {
           </figure>
           <p
             data-intro-copy
-            className="absolute left-[12%] right-[12%] top-[70%] text-[16px] leading-relaxed lg:left-[70%] lg:right-[5%] lg:top-[61%] lg:text-[clamp(16px,min(1.6vw,2.6svh),30px)]"
+            className="absolute left-[12%] right-[12%] top-[18%] text-[16px] leading-relaxed lg:left-[70%] lg:right-[5%] lg:top-[61%] lg:text-[clamp(16px,min(1.6vw,2.6svh),30px)]"
           >
             {introContent.opening}
             <br />
@@ -84,35 +84,38 @@ export default function MuseumIntro({ portrait, works }) {
 }
 
 function MuseumStory({ works }) {
+  const bySlug = new Map(works.map((work) => [work.slug, work]));
   return (
     <>
-      {streamPlanes.map(({ desktop, mobile, opacity, layer }, plane) => (
+      {streamPlanes.map((plane, depth) => (
         <div
-          key={layer}
+          key={plane.layer}
           data-art-stream
-          data-depth={plane}
+          data-depth={depth}
           aria-hidden="true"
-          className={`pointer-events-none invisible absolute inset-0 opacity-0 motion-reduce:hidden ${layer}`}
+          className={`pointer-events-none invisible absolute inset-0 opacity-0 motion-reduce:hidden ${plane.layer}`}
         >
           <div
             data-depth-plane
             className="absolute inset-0 will-change-transform"
           >
-            {works
-              .filter((_, index) => index % streamPlanes.length === plane)
-              .map((work, index) => (
+            {plane.works.map(({ slug, left, top }) => {
+              const work = bySlug.get(slug);
+              if (!work) return null;
+              return (
                 <div
                   key={work.slug}
                   data-stream-art
-                  data-depth={plane}
+                  data-depth={depth}
+                  data-side={left < 50 ? -1 : 1}
                   className="absolute w-[var(--mobile-width)] left-[var(--mobile-left)] lg:w-[var(--art-width)] lg:left-[var(--art-left)] will-change-transform"
                   style={{
-                    "--art-width": `${desktop.width}%`,
-                    "--mobile-width": `${mobile.width}%`,
-                    "--mobile-left": `${index % 2 ? mobile.right : mobile.left}%`,
-                    "--art-left": `${index % 2 ? desktop.right : desktop.left}%`,
-                    top: `${introMotion.stream.firstTop + (index * streamPlanes.length + plane) * introMotion.stream.spacing}%`,
-                    opacity,
+                    "--art-width": plane.desktopWidth,
+                    "--mobile-width": plane.mobileWidth,
+                    "--mobile-left": `${left < 50 ? plane.mobileLeft : plane.mobileRight}%`,
+                    "--art-left": `${left}%`,
+                    top: `${top}%`,
+                    opacity: plane.opacity,
                   }}
                 >
                   <ArtworkImage
@@ -120,11 +123,13 @@ function MuseumStory({ works }) {
                     title={work.title}
                     eager
                     contain
+                    naturalRatio
                     className="aspect-[3/4] bg-transparent!"
-                    sizes="(max-width: 1023px) 24vw, 28vw"
+                    sizes={`(max-width: 1023px) ${plane.mobileWidth}, ${plane.desktopWidth}`}
                   />
                 </div>
-              ))}
+              );
+            })}
           </div>
         </div>
       ))}

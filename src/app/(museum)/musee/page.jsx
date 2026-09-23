@@ -16,22 +16,21 @@ export const metadata = pageMetadata({
 });
 export default async function MuseumPage() {
   const works = await getObjects();
-  const find = (slug) => works.find((work) => work.slug === slug) || works[0];
-  const portrait = find(introContent.portraitSlug);
-  const stream = works
-    .filter((work) => work.slug !== portrait.slug)
-    .slice(0, introContent.streamLimit)
-    .map(publicObject);
+  const bySlug = new Map(works.map((work) => [work.slug, work]));
+  const selectWorks = (slugs) =>
+    slugs
+      .map((slug) => bySlug.get(slug))
+      .filter(Boolean)
+      .map(publicObject);
+  const portrait = bySlug.get(introContent.portraitSlug) || works[0];
+  const stream = selectWorks(introContent.streamSlugs);
   const chapters = artistChapters
-    .map((chapter) => ({
+    .map(({ slugs, ...chapter }) => ({
       ...chapter,
-      works: works
-        .filter((work) => work.artist === chapter.artist)
-        .slice(0, 2)
-        .map(publicObject),
+      works: selectWorks(slugs),
     }))
     .filter((chapter) => chapter.works.length === 2);
-  const passage = works.find((work) => work.slug === passageContent.slug);
+  const passage = bySlug.get(passageContent.slug);
   const passageIndex =
     chapters.findIndex(({ artist }) => artist === passageContent.afterArtist) +
     1;

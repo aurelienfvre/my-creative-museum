@@ -1,5 +1,6 @@
 import { gsap } from "@/lib/gsap";
 import { artistMotion, museumMotion } from "./motion.config";
+import { softenStickyEdges } from "./sticky-motion";
 
 export function animateArtistChapters(root, contextSafe) {
   const stage = root.querySelector("[data-artists-stage]");
@@ -162,6 +163,7 @@ export function animateArtistChapters(root, contextSafe) {
     updateAccessibility();
   });
   build();
+  const releaseEdges = softenStickyEdges(root, stage);
   const refresh = gsap.delayedCall(museumMotion.rebuildDelay, build).pause();
   const observer = new ResizeObserver(() => refresh.restart(true));
   observer.observe(stage);
@@ -174,6 +176,7 @@ export function animateArtistChapters(root, contextSafe) {
   });
   return () => {
     disposed = true;
+    releaseEdges();
     observer.disconnect();
     refresh.kill();
     timeline.scrollTrigger?.kill();
