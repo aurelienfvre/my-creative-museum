@@ -1,41 +1,56 @@
+import { introMotion, museumMotion } from "./motion.config";
+
 export function animateMuseumStory(timeline, root) {
+  const { stream, story, settle, ending } = introMotion;
   timeline
     .fromTo(
-      root.querySelector("[data-art-stream]"),
+      root.querySelectorAll("[data-art-stream]"),
       { autoAlpha: 0 },
-      { autoAlpha: 0.9, duration: 0.15 },
+      { autoAlpha: 0.9, duration: stream.enterDuration },
       0,
     )
     .fromTo(
       root.querySelectorAll("[data-stream-art]"),
       { y: 0 },
       {
-        y: () => -root.querySelector("section").clientHeight * 2.8,
-        duration: 1.15,
+        y: (_, element) =>
+          -root.querySelector("section").clientHeight *
+          (4.1 + Number(element.dataset.depth) * 0.4),
+        duration: stream.moveDuration,
         ease: "none",
       },
       0,
     )
     .to(
-      root.querySelector("[data-art-stream]"),
-      { autoAlpha: 0, duration: 0.2 },
-      0.92,
+      root.querySelectorAll("[data-art-stream]"),
+      { autoAlpha: 0, duration: stream.leaveDuration },
+      stream.leaveAt,
     );
-  for (const [selector, enter, leave] of [
-    ["[data-story-detail]", 0.35, 0.86],
-    ["[data-story-perspective]", 2.02, 2.4],
+  for (const [selector, { enter, leave }] of [
+    ["[data-story-detail]", story.detail],
+    ["[data-story-perspective]", story.perspective],
   ]) {
     const text = root.querySelector(selector);
     timeline.fromTo(
       text,
       { autoAlpha: 0, y: 36 },
-      { autoAlpha: 1, y: 0, duration: 0.26, ease: "sine.inOut" },
+      {
+        autoAlpha: 1,
+        y: 0,
+        duration: story.enterDuration,
+        ease: museumMotion.ease,
+      },
       enter,
     );
     if (leave !== null)
       timeline.to(
         text,
-        { autoAlpha: 0, y: -28, duration: 0.24, ease: "sine.inOut" },
+        {
+          autoAlpha: 0,
+          y: -28,
+          duration: story.leaveDuration,
+          ease: museumMotion.ease,
+        },
         leave,
       );
   }
@@ -46,7 +61,7 @@ export function animateMuseumStory(timeline, root) {
       autoAlpha: 0,
       y: () => root.querySelector("section").clientHeight * 0.09,
     },
-    { autoAlpha: 1, y: 0, duration: 0.38, ease: "sine.inOut" },
-    "portrait-settled",
+    { autoAlpha: 1, y: 0, duration: ending.duration, ease: museumMotion.ease },
+    settle.label,
   );
 }

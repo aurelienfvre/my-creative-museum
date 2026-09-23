@@ -1,6 +1,6 @@
 export function createSnapshot(content) {
-  // Freeze the viewport before transforming its parent: otherwise fixed
-  // ScrollTrigger sections change containing block and jump offscreen.
+  // Freeze the viewport before transforming its parent: fixed pins and sticky
+  // museum stages otherwise move when cloned into an unscrolled container.
   // Keep a non-interactive copy of the outgoing viewport while Next commits.
   // The incoming page itself then slides above it, with no colored curtain.
   const snapshot = content.cloneNode(true);
@@ -36,14 +36,18 @@ export function createSnapshot(content) {
   snapshot.querySelectorAll("script,dialog,.custom-cursor").forEach((node) => {
     node.remove();
   });
-  const pinned = content.querySelectorAll(".pin-spacer > section");
-  const clonedPins = snapshot.querySelectorAll(".pin-spacer > section");
+  const stages =
+    ".pin-spacer > section, [data-full-frame], [data-artists-stage], [data-passage-stage]";
+  const pinned = content.querySelectorAll(stages);
+  const clonedPins = snapshot.querySelectorAll(stages);
   pinned.forEach((node, index) => {
-    if (getComputedStyle(node).position !== "fixed") return;
+    const position = getComputedStyle(node).position;
+    if (position !== "fixed" && position !== "sticky") return;
     const rect = node.getBoundingClientRect();
     const clone = clonedPins[index];
     if (!clone) return;
-    // The snapshot is translated by the old scroll offset; compensate fixed pins.
+    // The translated snapshot becomes the fixed containing block. Preserve the
+    // live viewport position, including stages already partly leaving the view.
     Object.assign(clone.style, {
       position: "fixed",
       top: `${rect.top + window.scrollY}px`,

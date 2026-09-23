@@ -2,7 +2,9 @@
 import { useEffect, useRef } from "react";
 import ArtworkImage from "@/components/artwork/artwork-image";
 import { gsap, useGSAP } from "@/lib/gsap";
+import { introContent, streamPlanes } from "./data";
 import { animateMuseumIntro, loadMuseumImage } from "./intro-motion";
+import { introMotion, museumMotion } from "./motion.config";
 
 export default function MuseumIntro({ portrait, works }) {
   const scope = useRef(null);
@@ -14,15 +16,12 @@ export default function MuseumIntro({ portrait, works }) {
   useGSAP(
     () => {
       const media = gsap.matchMedia();
-      media.add(
-        "(prefers-reduced-motion: no-preference)",
-        (_context, contextSafe) => {
-          const setup = contextSafe(() =>
-            animateMuseumIntro(scope.current, contextSafe, motion.current),
-          );
-          return setup();
-        },
-      );
+      media.add(museumMotion.media.intro, (_context, contextSafe) => {
+        const setup = contextSafe(() =>
+          animateMuseumIntro(scope.current, contextSafe, motion.current),
+        );
+        return setup();
+      });
       return () => media.revert();
     },
     { scope },
@@ -30,7 +29,11 @@ export default function MuseumIntro({ portrait, works }) {
   return (
     <div
       ref={scope}
-      className="group relative min-h-svh motion-safe:h-[440svh] motion-safe:lg:h-[520svh]"
+      className="group relative min-h-svh motion-safe:h-[var(--intro-height)] motion-safe:lg:h-[var(--intro-desktop-height)]"
+      style={{
+        "--intro-height": `${introMotion.scroll.mobile}svh`,
+        "--intro-desktop-height": `${introMotion.scroll.desktop}svh`,
+      }}
     >
       <section
         data-full-frame
@@ -39,7 +42,7 @@ export default function MuseumIntro({ portrait, works }) {
         <div
           data-landing-frame
           aria-hidden="true"
-          className="pointer-events-none invisible absolute left-[20%] top-[8%] w-[60%] h-[46%] lg:left-[10%] lg:top-[12%] lg:w-[38%] lg:h-[76%]"
+          className="pointer-events-none invisible absolute left-1/2 -translate-x-1/2 top-[7%] w-[min(64vw,34.4svh)] h-[43svh] lg:translate-x-0 lg:left-[10%] lg:top-[12%] lg:w-[38%] lg:h-[76%]"
         />
         <canvas
           role="img"
@@ -50,7 +53,8 @@ export default function MuseumIntro({ portrait, works }) {
         />
         <MuseumStory works={works} />
         <h1 className="pt-[4svh] text-[15vw] lg:text-[clamp(64px,min(14vw,24svh),360px)] leading-[.95] tracking-[-.075em] text-foreground">
-          Le musée<span className="font-editorial">.</span>
+          {introContent.title}
+          <span className="font-editorial">.</span>
         </h1>
         <div className="contents">
           <figure
@@ -69,11 +73,9 @@ export default function MuseumIntro({ portrait, works }) {
             data-intro-copy
             className="absolute left-[12%] right-[12%] top-[70%] text-[16px] leading-relaxed lg:left-[70%] lg:right-[5%] lg:top-[61%] lg:text-[clamp(16px,min(1.6vw,2.6svh),30px)]"
           >
-            Des œuvres du monde entier.
+            {introContent.opening}
             <br />
-            <span className="text-muted">
-              Un espace pour prendre le temps de les regarder.
-            </span>
+            <span className="text-muted">{introContent.description}</span>
           </p>
         </div>
       </section>
@@ -84,66 +86,85 @@ export default function MuseumIntro({ portrait, works }) {
 function MuseumStory({ works }) {
   return (
     <>
-      <div
-        data-art-stream
-        aria-hidden="true"
-        className="pointer-events-none invisible absolute inset-0 opacity-0 [perspective:1000px] motion-reduce:hidden"
-      >
-        {works.map((work, index) => (
+      {streamPlanes.map(({ desktop, mobile, opacity, layer }, plane) => (
+        <div
+          key={layer}
+          data-art-stream
+          data-depth={plane}
+          aria-hidden="true"
+          className={`pointer-events-none invisible absolute inset-0 opacity-0 motion-reduce:hidden ${layer}`}
+        >
           <div
-            key={work.slug}
-            data-stream-art
-            className="absolute w-[19%] opacity-60 lg:w-[21%]"
-            style={{
-              left: `${index % 2 ? 77 : 2}%`,
-              top: `${85 + index * 42}%`,
-              transform: `translateZ(-140px) rotateY(${index % 2 ? -10 : 10}deg)`,
-            }}
+            data-depth-plane
+            className="absolute inset-0 will-change-transform"
           >
-            <ArtworkImage
-              src={work.image}
-              title={work.title}
-              eager
-              contain
-              className="aspect-[3/4] bg-transparent!"
-              sizes="25vw"
-            />
+            {works
+              .filter((_, index) => index % streamPlanes.length === plane)
+              .map((work, index) => (
+                <div
+                  key={work.slug}
+                  data-stream-art
+                  data-depth={plane}
+                  className="absolute w-[var(--mobile-width)] left-[var(--mobile-left)] lg:w-[var(--art-width)] lg:left-[var(--art-left)] will-change-transform"
+                  style={{
+                    "--art-width": `${desktop.width}%`,
+                    "--mobile-width": `${mobile.width}%`,
+                    "--mobile-left": `${index % 2 ? mobile.right : mobile.left}%`,
+                    "--art-left": `${index % 2 ? desktop.right : desktop.left}%`,
+                    top: `${introMotion.stream.firstTop + (index * streamPlanes.length + plane) * introMotion.stream.spacing}%`,
+                    opacity,
+                  }}
+                >
+                  <ArtworkImage
+                    src={work.image}
+                    title={work.title}
+                    eager
+                    contain
+                    className="aspect-[3/4] bg-transparent!"
+                    sizes="(max-width: 1023px) 24vw, 28vw"
+                  />
+                </div>
+              ))}
           </div>
-        ))}
-      </div>
+        </div>
+      ))}
       <p
         data-story-detail
         className="pointer-events-none invisible absolute inset-x-[10%] top-[73%] text-[26px] lg:inset-x-[28%] lg:top-[82%] lg:text-[clamp(22px,min(2.5vw,3.4svh),44px)] motion-reduce:hidden z-20 text-center leading-tight tracking-tight text-foreground opacity-0"
       >
-        Des siècles d’art.
+        {introContent.detail.opening}
         <br />
-        <em className="font-editorial">Votre regard.</em>
+        <em className="font-editorial">{introContent.detail.emphasis}</em>
       </p>
       <div
         data-story-perspective
         className="pointer-events-none invisible absolute left-[8%] bottom-[10%] w-[84%] lg:bottom-[12%] lg:w-[52%] z-20 text-white opacity-0 drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]"
       >
         <p className="text-[clamp(26px,7vw,38px)] lg:text-[clamp(28px,min(4vw,6svh),80px)] leading-[1.04] tracking-tight">
-          Derrière chaque œuvre,
+          {introContent.perspective.opening}
           <br />
-          <em className="font-editorial text-white!">une histoire.</em>
+          <em className="font-editorial text-white!">
+            {introContent.perspective.emphasis}
+          </em>
         </p>
         <p className="mt-[clamp(16px,3svh,32px)] max-w-[36ch] text-[clamp(15px,min(1.5vw,2.2svh),24px)] leading-relaxed">
-          Retrouvez son artiste, son époque et le musée qui conserve l’original.
+          {introContent.perspective.text}
         </p>
       </div>
       <div
         data-story-ending
-        className="pointer-events-none invisible absolute left-[9%] right-[9%] top-[62%] lg:left-[58%] lg:right-[7%] lg:top-[34%] z-20 opacity-0"
+        className="pointer-events-none invisible absolute left-[9%] right-[9%] top-[57%] lg:left-[58%] lg:right-[7%] lg:top-[34%] z-20 opacity-0"
       >
         <p className="text-[clamp(26px,7vw,38px)] lg:text-[clamp(28px,min(4vw,6svh),80px)] leading-[1.04] tracking-tight">
-          Prenez le temps
+          {introContent.ending.opening}
           <br />
-          de <em className="font-editorial text-foreground">voir.</em>
+          {introContent.ending.prefix}{" "}
+          <em className="font-editorial text-foreground">
+            {introContent.ending.emphasis}
+          </em>
         </p>
         <p className="mt-[clamp(16px,3svh,32px)] max-w-[36ch] text-[clamp(15px,min(1.5vw,2.2svh),24px)] leading-relaxed text-muted">
-          Un détail, une couleur, une émotion. Chaque visite commence par ce qui
-          vous touche.
+          {introContent.ending.text}
         </p>
       </div>
     </>

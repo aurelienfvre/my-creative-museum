@@ -1,4 +1,9 @@
 @import "tailwindcss";
+@custom-variant museum-motion (@media (
+    prefers-reduced-motion: no-preference
+  ) and (min-height: 540px) and (
+    (min-width: 1024px) or (orientation: portrait)
+  ));
 :root {
   color-scheme: light;
   --background: #f6f4ed;
