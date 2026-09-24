@@ -24,21 +24,13 @@ export function startCarousel(root, works, setActiveIndex) {
   let displayed = -1;
   const state = { angle: 0, velocity: 0 };
   const sceneParts = createCarouselScene(works, state);
-  const {
-    scene,
-    camera,
-    cylinder,
-    geometry,
-    materials,
-    shaders,
-    meshes,
-    step,
-  } = sceneParts;
+  const { scene, camera, cylinder, geometry, materials, meshes, step } =
+    sceneParts;
   const render = () => {
     if (disposed) return;
     cylinder.rotation.y = state.angle;
-    for (const shader of shaders)
-      if (shader) shader.uniforms.uVelocity.value = state.velocity;
+    for (const material of materials)
+      material.uniforms.uVelocity.value = state.velocity;
     const center = Math.min(
       works.length - 1,
       Math.max(0, Math.round(-state.angle / step)),

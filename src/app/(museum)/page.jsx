@@ -74,7 +74,7 @@ export default async function Home() {
             followSelector=".manifesto-bottom"
             text="On n’a pas besoin de tout connaître pour ressentir quelque chose."
           />
-          <div className="manifesto-bottom mt-6 flex flex-col items-start justify-between gap-6 lg:mt-10 lg:flex-row lg:items-end lg:gap-16">
+          <div className="manifesto-bottom motion-safe:opacity-0 mt-6 flex flex-col items-start justify-between gap-6 lg:mt-10 lg:flex-row lg:items-end lg:gap-16">
             <p className="max-w-[32rem] text-base leading-[1.6] text-muted lg:max-w-[22rem] lg:text-[.95rem] lg:leading-[1.7]">
               Un musée numérique pour les regards curieux. Des œuvres venues du
               monde entier, à découvrir à son rythme.

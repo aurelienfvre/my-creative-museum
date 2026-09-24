@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { getTextureImageSrc } from "@/lib/image";
 import { useMuseumStore } from "@/stores/use-museum-store";
 import { createImageScene } from "./image-scene";
 import { museumMotion } from "./motion.config";
@@ -135,7 +136,7 @@ export function startMuseumImage(root, src, motion) {
   document.addEventListener("visibilitychange", refreshVisibility);
   const textureWidth = window.innerWidth < 1024 ? 1200 : 1920;
   new THREE.TextureLoader().load(
-    `/_next/image?url=${encodeURIComponent(src)}&w=${textureWidth}&q=75`,
+    getTextureImageSrc(src, textureWidth),
     (loaded) => {
       if (disposed || failed) {
         loaded.dispose();

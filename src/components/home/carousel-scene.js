@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { fragmentShader, vertexShader } from "./carousel-shaders";
 
 export function createCarouselScene(works, state) {
   const radius = 7;
@@ -27,21 +28,19 @@ export function createCarouselScene(works, state) {
   }
   geometry.computeVertexNormals();
   const materials = [];
-  const shaders = [];
   const meshes = works.map((_work, index) => {
-    const material = new THREE.MeshBasicMaterial({ color: "#d9d7cd" });
-    material.onBeforeCompile = (shader) => {
-      shader.uniforms.uVelocity = { value: state.velocity };
-      shader.vertexShader =
-        `uniform float uVelocity;\n${shader.vertexShader}`.replace(
-          "#include <begin_vertex>",
-          `#include <begin_vertex>
-  float wave = sin(uv.y * 3.14159265);
-  transformed.x += wave * uVelocity * 0.075;
-  transformed.z += sin(uv.x * 3.14159265) * wave * uVelocity * 0.085;`,
-        );
-      shaders[index] = shader;
-    };
+    const material = new THREE.ShaderMaterial({
+      glslVersion: THREE.GLSL3,
+      vertexShader,
+      fragmentShader,
+      uniforms: {
+        uVelocity: { value: state.velocity },
+        uImage: { value: null },
+        uHasImage: { value: false },
+        uImageTransform: { value: new THREE.Matrix3() },
+        uPlaceholder: { value: new THREE.Color("#d9d7cd") },
+      },
+    });
     materials.push(material);
     const mesh = new THREE.Mesh(geometry, material);
     mesh.position.set(
@@ -65,7 +64,6 @@ export function createCarouselScene(works, state) {
     cylinder,
     geometry,
     materials,
-    shaders,
     meshes,
   };
 }

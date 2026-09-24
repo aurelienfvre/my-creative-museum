@@ -63,7 +63,7 @@ export default function RevealText({
             className="reveal-word inline-block overflow-hidden pt-[.1em] pb-[.22em] pl-0 pr-0 -mb-[.22em] [perspective:600px] align-top [&>span]:inline-block"
             key={`${index}-${word}`}
           >
-            <span className="whitespace-pre">
+            <span className="whitespace-pre motion-safe:opacity-0">
               {word}
               {index < words.length - 1 ? " " : ""}
             </span>

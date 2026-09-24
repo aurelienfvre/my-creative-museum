@@ -30,6 +30,7 @@ export function createImageScene(canvas) {
     mobile ? 28 : 40,
   );
   const material = new THREE.ShaderMaterial({
+    glslVersion: THREE.GLSL3,
     uniforms,
     vertexShader,
     fragmentShader,

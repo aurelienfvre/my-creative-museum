@@ -1,8 +1,8 @@
 export const vertexShader = `
   uniform float uProgress, uVelocity, uTouch;
   uniform vec2 uPointer;
-  varying vec2 vUv;
-  varying float vLight;
+  out vec2 vUv;
+  out float vLight;
   void main() {
     vUv = uv;
     vec3 p = position;
@@ -23,16 +23,19 @@ export const fragmentShader = `
   uniform sampler2D uImage;
   uniform vec2 uCover;
   uniform float uProgress;
-  varying vec2 vUv;
-  varying float vLight;
+  in vec2 vUv;
+  in float vLight;
+  out vec4 fragColor;
   void main() {
     vec2 sampleUv = (vUv - .5) * uCover + .5;
-    vec3 color = texture2D(uImage, sampleUv).rgb;
+    vec3 color = texture(uImage, sampleUv).rgb;
     vec2 q = abs(vUv - .5) - vec2(.5);
     float edge = length(max(q, 0.)) + min(max(q.x,q.y),0.);
     float alpha = 1. - smoothstep(-.002, .001, edge);
-    gl_FragColor = vec4(color * vLight, alpha);
-    #include <tonemapping_fragment>
-    #include <colorspace_fragment>
+    vec4 shadedColor = vec4(color * vLight, alpha);
+    #if defined(TONE_MAPPING)
+      shadedColor.rgb = toneMapping(shadedColor.rgb);
+    #endif
+    fragColor = linearToOutputTexel(shadedColor);
   }
 `;

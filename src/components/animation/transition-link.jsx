@@ -3,32 +3,38 @@ import Link from "next/link";
 import { useContext } from "react";
 import { NavigationContext } from "@/contexts/navigation-context";
 
-export default function TransitionLink({ href, children, onClick, ...props }) {
+export default function TransitionLink({
+  href,
+  children,
+  onClick,
+  onNavigate,
+  ...props
+}) {
   const navigate = useContext(NavigationContext);
   return (
     <Link
       {...props}
       href={href}
-      onClick={(event) => {
-        onClick?.(event);
+      onClick={onClick}
+      onNavigate={(event) => {
+        let cancelled = false;
+        onNavigate?.({
+          preventDefault() {
+            cancelled = true;
+            event.preventDefault();
+          },
+        });
         if (
-          event.defaultPrevented ||
-          event.button !== 0 ||
-          event.metaKey ||
-          event.ctrlKey ||
-          event.shiftKey ||
-          event.altKey ||
-          props.target === "_blank" ||
-          props.download
+          cancelled ||
+          !navigate ||
+          typeof href !== "string" ||
+          props.replace ||
+          props.scroll === false ||
+          props.transitionTypes
         )
           return;
         const url = new URL(href, window.location.href);
-        if (
-          url.origin !== window.location.origin ||
-          url.pathname === window.location.pathname ||
-          !navigate
-        )
-          return;
+        if (url.pathname === window.location.pathname) return;
         event.preventDefault();
         navigate(href);
       }}

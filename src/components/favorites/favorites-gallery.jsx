@@ -3,7 +3,7 @@ import { useRef, useState } from "react";
 import FlipText from "@/components/animation/flip-text";
 import TransitionLink from "@/components/animation/transition-link";
 import ArtworkCard from "@/components/artwork/artwork-card";
-import { gsap } from "@/lib/gsap";
+import { gsap, useGSAP } from "@/lib/gsap";
 import FavoriteButton from "./favorite-button";
 
 export default function FavoritesGallery({ objects }) {
@@ -79,12 +79,27 @@ export default function FavoritesGallery({ objects }) {
 
 function FavoriteCard({ object, index, onRemove, onRestore }) {
   const ref = useRef(null);
+  const { contextSafe } = useGSAP({ scope: ref });
+  const animateVisibility = contextSafe((saved) => {
+    const element = ref.current;
+    if (!element) return;
+    gsap.killTweensOf(element);
+    if (saved) {
+      gsap.set(element, { autoAlpha: 1, y: 0 });
+      return;
+    }
+    gsap.to(element, {
+      autoAlpha: 0,
+      y: -16,
+      duration: 0.3,
+      ease: "power2.in",
+      onComplete: () => onRemove(object.slug),
+    });
+  });
   function changed(saved, feedback) {
     if (saved) {
-      if (ref.current) {
-        gsap.killTweensOf(ref.current);
-        gsap.set(ref.current, { autoAlpha: 1, y: 0 });
-      }
+      animateVisibility(true);
+      // A failed request must restore the parent list even after this card exits.
       onRestore(object, feedback.error);
       return;
     }
@@ -101,13 +116,7 @@ function FavoriteCard({ object, index, onRemove, onRestore }) {
       onRemove(object.slug);
       return;
     }
-    gsap.to(ref.current, {
-      autoAlpha: 0,
-      y: -16,
-      duration: 0.3,
-      ease: "power2.in",
-      onComplete: () => onRemove(object.slug),
-    });
+    animateVisibility(false);
   }
   return (
     <article ref={ref} className="min-w-0" data-reveal>

@@ -1,21 +1,18 @@
 "use client";
 import NextImage from "next/image";
-import { forwardRef } from "react";
 
-const Media = forwardRef(function Media(
-  {
-    src,
-    alt = "",
-    fill = true,
-    objectFit = "cover",
-    objectPosition = "center",
-    sizes = "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw",
-    preload = false,
-    style,
-    ...props
-  },
+export default function Media({
   ref,
-) {
+  src,
+  alt = "",
+  fill = true,
+  objectFit = "cover",
+  objectPosition = "center",
+  sizes = "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw",
+  preload = false,
+  style,
+  ...props
+}) {
   const source = typeof src === "string" ? src : src?.src || "";
   const isVideo = /\.(mp4|webm|mov)(?:[?#]|$)/i.test(source);
   if (isVideo)
@@ -51,5 +48,4 @@ const Media = forwardRef(function Media(
       style={{ objectFit, objectPosition, ...style }}
     />
   );
-});
-export default Media;
+}

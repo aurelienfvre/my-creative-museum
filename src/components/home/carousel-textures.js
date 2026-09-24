@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { getTextureImageSrc } from "@/lib/image";
 
 export function createCarouselTextures({
   works,
@@ -22,7 +23,7 @@ export function createCarouselTextures({
       requested.add(index);
       pending++;
       loader.load(
-        `/_next/image?url=${encodeURIComponent(works[index].image)}&w=640&q=75`,
+        getTextureImageSrc(works[index].image, 640),
         (texture) => {
           pending--;
           if (disposed()) {
@@ -40,9 +41,11 @@ export function createCarouselTextures({
             texture.offset.y = (1 - texture.repeat.y) / 2;
           }
           textures.push(texture);
-          materials[index].map = texture;
-          materials[index].color.set("white");
-          materials[index].needsUpdate = true;
+          texture.updateMatrix();
+          const { uniforms } = materials[index];
+          uniforms.uImage.value = texture;
+          uniforms.uImageTransform.value.copy(texture.matrix);
+          uniforms.uHasImage.value = true;
           render();
         },
         undefined,
