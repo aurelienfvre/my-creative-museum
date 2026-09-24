@@ -2,6 +2,7 @@
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { authClient } from "@/lib/auth-client";
+import { getAuthErrorMessage } from "@/lib/auth-errors";
 export default function useAuthForm(mode) {
   const router = useRouter();
   const lock = useRef(false);
@@ -27,19 +28,13 @@ export default function useAuthForm(mode) {
             })
           : await authClient.signIn.email(credentials);
       if (result.error) {
-        setError(
-          result.error.status === 429
-            ? "Trop de tentatives. Patientez un instant avant de réessayer."
-            : mode === "signup"
-              ? "Impossible de créer ce compte. Vérifiez vos informations ou essayez de vous connecter."
-              : "Email ou mot de passe incorrect.",
-        );
+        setError(getAuthErrorMessage(result.error, mode));
       } else {
         router.replace("/");
         router.refresh();
       }
     } catch {
-      setError("La connexion est indisponible. Réessayez dans un instant.");
+      setError(getAuthErrorMessage({ status: 0 }, mode));
     } finally {
       lock.current = false;
       setPending(false);

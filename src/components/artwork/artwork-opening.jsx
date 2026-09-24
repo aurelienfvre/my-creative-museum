@@ -3,7 +3,7 @@ import FavoriteButton from "@/components/favorites/favorite-button";
 import ArtworkImage from "./artwork-image";
 export default function ArtworkOpening({ object }) {
   return (
-    <section className="artwork-opening page-gutter grid grid-cols-1 gap-6 pt-5 pb-8 lg:grid-cols-[.85fr_1.15fr] lg:gap-16 lg:pt-12 lg:pb-20">
+    <section className="artwork-opening page-gutter grid grid-cols-1 gap-6 pt-5 pb-8 lg:grid-cols-[minmax(0,.85fr)_minmax(0,1.15fr)] lg:gap-16 lg:pt-12 lg:pb-20">
       <div className="artwork-opening-copy flex min-w-0 flex-col items-start lg:py-4 max-lg:[&_.back-link]:mb-0 max-lg:[&_.back-link]:min-h-11">
         <BackButton href="/collection" />
         <h1
@@ -24,7 +24,7 @@ export default function ArtworkOpening({ object }) {
         </div>
       </div>
       <div
-        className="artwork-opening-image mx-auto w-full max-w-xl [&_.artwork-image]:aspect-[4/5] [&_.artwork-image]:max-h-[65svh] [&_.artwork-image]:min-h-0 [&_.artwork-image]:bg-transparent lg:max-w-none lg:[&_.artwork-image]:h-[70vh] lg:[&_.artwork-image]:max-h-none lg:[&_.artwork-image]:min-h-[38rem]"
+        className="artwork-opening-image mx-auto w-full min-w-0 max-w-xl [&_.artwork-image]:w-full [&_.artwork-image]:max-w-full [&_.artwork-image]:aspect-[4/5] [&_.artwork-image]:max-h-[65svh] [&_.artwork-image]:min-h-0 [&_.artwork-image]:bg-transparent lg:max-w-none lg:[&_.artwork-image]:h-[70vh] lg:[&_.artwork-image]:max-h-none lg:[&_.artwork-image]:min-h-[38rem]"
         data-arrive
       >
         <ArtworkImage
