@@ -1,4 +1,4 @@
-import TicketBuilder from "@/components/billetterie/ticket-builder";
+import TicketBuilder from "@/components/tickets/ticket-builder";
 import { pageMetadata } from "@/lib/metadata";
 export const metadata = pageMetadata({
   path: "/billetterie",

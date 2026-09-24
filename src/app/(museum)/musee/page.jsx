@@ -1,9 +1,9 @@
+import MuseumArtists from "@/components/museum/museum-artists";
 import {
   artistChapters,
   introContent,
   passageContent,
-} from "@/components/museum/data";
-import MuseumArtists from "@/components/museum/museum-artists";
+} from "@/components/museum/museum-content";
 import MuseumIntro from "@/components/museum/museum-intro";
 import MuseumPassage from "@/components/museum/museum-passage";
 import { pageMetadata } from "@/lib/metadata";

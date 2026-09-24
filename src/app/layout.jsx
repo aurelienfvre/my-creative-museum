@@ -7,7 +7,6 @@ import PageTransition from "@/components/animation/page-transition";
 import SmoothScroll from "@/components/animation/smooth-scroll";
 import Footer from "@/components/layout/footer";
 import Header from "@/components/layout/header";
-import { getObjects, publicObject } from "@/lib/museum";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -37,8 +36,7 @@ export const metadata = {
   description:
     "Un musée numérique, libre et curieux. Explorez les œuvres, rencontrez les artistes et laissez-vous surprendre par l’art.",
 };
-export default async function RootLayout({ children }) {
-  const objects = await getObjects().catch(() => []);
+export default function RootLayout({ children }) {
   return (
     <html
       lang="fr"
@@ -54,9 +52,7 @@ export default async function RootLayout({ children }) {
         >
           Aller au contenu
         </a>
-        <PageTransition
-          navigation={<Header objects={objects.map(publicObject)} />}
-        >
+        <PageTransition navigation={<Header />}>
           <div className="page-surface relative z-2 bg-background shadow-[0_1rem_2rem_rgb(0_0_0/0.08)] pt-20 lg:pt-25 min-h-svh">
             <GSAPWrapper>{children}</GSAPWrapper>
           </div>

@@ -1,7 +1,7 @@
 import { Flip } from "gsap/Flip";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
-import { streamPlanes } from "./data";
 import { introMotion, museumMotion } from "./motion.config";
+import { streamPlanes } from "./museum-content";
 import { softenStickyEdges } from "./sticky-motion";
 import { animateMuseumStory } from "./story-motion";
 
@@ -196,7 +196,7 @@ export function loadMuseumImage(root, src, motion) {
     dispose = undefined;
     delete root.dataset.webgl;
     if (!media.matches) return;
-    import("./image-runtime")
+    import("./museum-image-runtime")
       .then(({ startMuseumImage }) => {
         if (current === generation)
           dispose = startMuseumImage(root, src, motion);

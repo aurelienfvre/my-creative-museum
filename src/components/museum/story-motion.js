@@ -1,5 +1,5 @@
-import { streamPlanes } from "./data";
 import { introMotion, museumMotion } from "./motion.config";
+import { streamPlanes } from "./museum-content";
 
 export function animateMuseumStory(timeline, root) {
   const { stream, story, settle, ending } = introMotion;

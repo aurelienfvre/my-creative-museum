@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "biome check",
     "format": "biome format --write",
-    "test": "node --import tsx --test work/qa/*.test.mjs tests/*.test.mjs",
+    "test": "node --import tsx --test tests/*.test.mjs",
     "auth:migrate": "tsx scripts/auth-migrate.mjs",
     "build:vercel": "npm run auth:migrate && next build",
     "auth:generate": "auth generate --config ./scripts/auth-schema.ts --output ./src/db/auth-schema.ts --yes",

@@ -4,8 +4,8 @@ import { useRef, useState } from "react";
 import TransitionLink from "@/components/animation/transition-link";
 import Media from "@/components/ui/media";
 import { gsap, useGSAP } from "@/lib/gsap";
-import { passageContent } from "./data";
 import { museumMotion, passageMotion } from "./motion.config";
+import { passageContent } from "./museum-content";
 import { animateMuseumPassage } from "./passage-motion";
 
 export default function MuseumPassage({ work }) {

@@ -1,6 +1,6 @@
 import * as THREE from "three";
-import { passageContent } from "./data";
 import { passageMotion } from "./motion.config";
+import { passageContent } from "./museum-content";
 
 const vertexShader = `
   varying vec2 vUv;

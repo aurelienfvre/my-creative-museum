@@ -2,9 +2,9 @@
 import { useEffect, useRef } from "react";
 import ArtworkImage from "@/components/artwork/artwork-image";
 import { gsap, useGSAP } from "@/lib/gsap";
-import { introContent, streamPlanes } from "./data";
 import { animateMuseumIntro, loadMuseumImage } from "./intro-motion";
 import { introMotion, museumMotion } from "./motion.config";
+import { introContent, streamPlanes } from "./museum-content";
 
 export default function MuseumIntro({ portrait, works }) {
   const scope = useRef(null);

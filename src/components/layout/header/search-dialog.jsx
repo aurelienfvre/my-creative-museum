@@ -12,6 +12,8 @@ export default function SearchDialog({
   query,
   setQuery,
   results,
+  status,
+  onRetry,
 }) {
   const onNavigate = useSearchNavigation(onClose);
   const canSearch = Array.from(query.trim()).length >= 3;
@@ -68,11 +70,30 @@ export default function SearchDialog({
             Saisissez au moins 3 caractères.
           </p>
         )}
-        <SearchResults
-          query={query}
-          results={results}
-          onNavigate={onNavigate}
-        />
+        {status === "loading" && (
+          <output className="my-6 block text-sm text-muted">
+            Chargement de la collection…
+          </output>
+        )}
+        {status === "error" && (
+          <div className="my-6 text-sm">
+            <p role="alert">La recherche est momentanément indisponible.</p>
+            <button
+              type="button"
+              onClick={onRetry}
+              className="mt-2 min-h-11 text-foreground underline underline-offset-4"
+            >
+              Réessayer
+            </button>
+          </div>
+        )}
+        {status === "ready" && (
+          <SearchResults
+            query={query}
+            results={results}
+            onNavigate={onNavigate}
+          />
+        )}
         <TransitionLink
           href={`/collection${canSearch ? `?q=${encodeURIComponent(query.trim())}` : ""}`}
           onClick={onNavigate}

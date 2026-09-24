@@ -8,9 +8,11 @@ import MuseumLogo from "@/components/ui/museum-logo";
 import { matchesSearch } from "@/lib/search";
 import SearchDialog from "./header/search-dialog";
 import useHeaderScroll from "./header/use-header-scroll";
+import useSearchCatalog from "./header/use-search-catalog";
 import useSearchDialog from "./header/use-search-dialog";
 
-export default function Header({ objects }) {
+export default function Header() {
+  const { objects, status, load } = useSearchCatalog();
   const [query, setQuery] = useState("");
   const dialog = useRef(null);
   const input = useRef(null);
@@ -42,7 +44,10 @@ export default function Header({ objects }) {
         <button
           type="button"
           className="search-button grid size-11 place-items-center lg:size-8 [&>svg]:w-[1.2rem]"
-          onClick={openSearch}
+          onClick={() => {
+            openSearch();
+            void load();
+          }}
           aria-label="Rechercher une œuvre"
         >
           <Icon name="search" />
@@ -57,6 +62,8 @@ export default function Header({ objects }) {
         query={query}
         setQuery={setQuery}
         results={results}
+        status={status}
+        onRetry={load}
       />
     </header>
   );
