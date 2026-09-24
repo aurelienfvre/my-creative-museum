@@ -44,7 +44,7 @@ export default function RootLayout({ children }) {
     >
       <body>
         <noscript>
-          <style>{`.home-motion + .home-manifesto { visibility: visible !important; }`}</style>
+          <style>{`.home-motion + .home-manifesto { visibility: visible !important; opacity: 1 !important; }`}</style>
         </noscript>
         <a
           href="#main"

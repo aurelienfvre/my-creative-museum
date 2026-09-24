@@ -66,7 +66,7 @@ export default async function Home() {
           </figure>
         </section>
       </HomeMotion>
-      <section className="home-manifesto [.home-motion:not([data-hero-ready=true])+&]:invisible page-gutter grid grid-cols-1 gap-6 py-10 text-ink sm:gap-8 sm:py-12 lg:grid-cols-[1fr_3fr] lg:gap-16 lg:py-24">
+      <section className="home-manifesto [.home-motion:not([data-hero-ready=true])+&]:invisible [.home-motion:not([data-hero-ready=true])+&]:opacity-0 motion-safe:transition-opacity motion-safe:duration-700 motion-safe:ease-out page-gutter grid grid-cols-1 gap-6 py-10 text-ink sm:gap-8 sm:py-12 lg:grid-cols-[1fr_3fr] lg:gap-16 lg:py-24">
         <MuseumLogo size={90} className="size-14 rotate-[-8deg] lg:size-24" />
         <div>
           <RevealText
